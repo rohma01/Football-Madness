@@ -1,1 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fantasy Soccer Table</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  .table-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .table-header, .table-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    border: 1px solid #ddd;
+  }
+  .table-header {
+    background-color: #f0f0f0;
+    font-weight: bold;
+  }
+  .back-button {
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<button onclick="window.location.href='previous-page.html'" class="back-button">Back</button>
+
+<div class="table-container">
+  <div class="table-header">
+    <span>Player</span>
+    <span>Team</span>
+    <span>Position</span>
+    <span>Points</span>
+  </div>
+  <!-- Table rows will be added here -->
+</div>
+
+<script>
+  // Replace this with the actual data source
+  var playersData = [
+    { player: 'John Doe', team: 'FC Barcelona', position: 'Forward', points: 50 },
+    { player: 'Jane Smith', team: 'Real Madrid', position: 'Midfielder', points: 40 },
+    // Add more player data objects here
+  ];
+
+  var tableContainer = document.querySelector('.table-container');
+
+  playersData.forEach(function(player) {
+    var row = document.createElement('div');
+    row.classList.add('table-row');
+    row.innerHTML = '<span>' + player.player + '</span>' +
+                    '<span>' + player.team + '</span>' +
+                    '<span>' + player.position + '</span>' +
+                    '<span>' + player.points + '</span>';
+    tableContainer.appendChild(row);
+  });
+</script>
+
+</body>
+</html>
 
