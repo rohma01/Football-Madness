@@ -1,94 +1,106 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <style type="text/css">
-            * {
-                padding: 0;
-                margin: 0;
-                box-sizing: border-box;
-                font-family: 'Times New Roman', Times, serif;
-            }
-            .background{
-                background-color: green;
-                height: 100vh;
-                width: 100vw;
-            }
-            h1{
-                font-size: 70px;
-                padding-top: 10px;
-                color: white;
-                position: relative;
-                text-align: center;
-            }
-            #name{
-                position:absolute;
-                right: 10;
-            }
-            .directory{
-                display: flex;
-                justify-content: space-around;
-            }
-            button{
-                font-size: 30pt;
-                padding:1%;
-            }
-            table{
-                display: flex;
-                justify-content: space-around;
-                padding: 1%;
-            }
-            td, th {
-                border: 1px solid #dddddd;
-                text-align: left;
-                padding: 8px;
-            }
-            th{
-                text-align: center;
-            }
-            tr:nth-child(even) {
-                background-color: #dddddd;
-            }
-            .advance{
-                display: flex;
-                padding: 1%;
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                white-space: nowrap;
-            }
-            </style>
-        </text>
-    </head>
-    <body>
-        <div class="background">
-            <div class = "header">
-                <div id="name">Vedant</div>
 
-                <h1>Football Madness</h1>
-            </div>
-            <div class = "directory">
-                <button>Draft</button>
-                <button>My Team</button>
-                <button>League</button>
-            </div>
-            <table id="myTeam">
-                <tr>
-                    <th>Player</th>
-                    <th>Team</th>
-                    <th>Position</th>
-                    <th>Points</th>
-                </tr>
-                <tr>
-                    <td>Cristiano Ronaldo</td>
-                    <td>Manchester United</td>
-                    <td>ST</td>
-                    <td>0.0</td>
-                </tr>
-            </table>
-            <div class="advance">
-                <button>SIM</button>
-                <button>NEXT WEEK</button>
-            </div>
+<head>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
 
+        .background {
+            background-color: green;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        h1 {
+            font-size: 70px;
+            padding-top: 10px;
+            color: white;
+            position: relative;
+            text-align: center;
+        }
+
+        #name {
+            position: absolute;
+            right: 10;
+        }
+
+        .directory {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        button {
+            font-size: 30pt;
+            padding: 1%;
+        }
+
+        table {
+            display: flex;
+            justify-content: space-around;
+            padding: 1%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
+        .advance {
+            display: flex;
+            padding: 1%;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background">
+        <div class="header">
+            <div id="name">Vedant</div>
+            <h1>Football Madness</h1>
         </div>
-    </body>
+        <div class="directory">
+            <a href="draft.html"><button>Draft</button></a>
+            <a href="myteam.html"><button>My Team</button></a>
+            <a href="league.html"><button>League</button></a>
+        </div>
+        <table id="myTeam">
+            <tr>
+                <th>Player</th>
+                <th>Team</th>
+                <th>Position</th>
+                <th>Points</th>
+            </tr>
+            <tr>
+                <td>Cristiano Ronaldo</td>
+                <td>Manchester United</td>
+                <td>ST</td>
+                <td>0.0</td>
+            </tr>
+        </table>
+        <div class="advance">
+            <button>SIM</button>
+            <button>NEXT WEEK</button>
+        </div>
+    </div>
+</body>
+
 </html>

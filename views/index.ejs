@@ -69,7 +69,7 @@
 <body>
 
     <img src="soccer_goal.jpg" style = "width:100%;"> 
-    <form id="loginForm">
+    <form id="loginForm" method="POST" action="/signup">
         <h2> <img src="fantasy_soccer.jpg" style= "width:15%;">Fantasy PL Login</h2>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -83,7 +83,7 @@
         <p class="switch">Don't have an account? <a href="#" onclick="toggleForm()">Sign up</a></p>
     </form>
 
-    <form id="signupForm" style="display: none;">
+    <form id="signupForm" method="POST" action="/signup" style="display: none;">
         <h2> <img src="fantasy_soccer.jpg" style= "width:15%;">Fantasy PL Sign up</h2>
         <label for="newUsername">Username:</label>
         <input type="text" id="newUsername" name="newUsername" required>
