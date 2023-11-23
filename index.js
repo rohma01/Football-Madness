@@ -9,8 +9,6 @@ mongoose.connect("mongodb://localhost:27017/FootballMadness", {useNewUrlParser: 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-app.use(express.static("public"));
-app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.get("/",(req,res) => {
@@ -25,7 +23,7 @@ app.get("/login", (req,res) => {
     res.render("login");
 });
 
-app.post("homepage", (req,res) => {
+app.post("/signup", (req,res) => {
     const userName=req.body.userName;
     const password=req.body.password;
 
