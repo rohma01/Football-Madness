@@ -2,7 +2,6 @@ const express = require('express');
 const User = require('./User');
 const bcrypt = require('bcrypt')
 const router = express.Router();
-module.exports = router;
 router.post('/register', async (req, res) => {
     try { 
         const { username, password } = req.body;
@@ -24,11 +23,15 @@ router.post('/register', async (req, res) => {
             //if passwords DONT match
             if (!passwordMatch) {
                 console.log("taken already")
-                return res.status(400).json({ message: 'Username already taken' });
+                //return res.status(400).json({ message: 'Username already taken/Incorrect password!' });
+                 return res.status(400).json({ message: 'Username already taken' });
             } else {
                 //sign in the user if they do match!
                 console.log("Welcome back!")
-                return res.status(201).json({ message: 'Welcome back existing user!' });
+                return res.status(201).json({redirect:'/homepage.html'});
+                // return res.status(201).json({ message: 'Welcome back existing user!' });
+
+
             }
             // Password matches, so allow registration with the same username
         } else {
@@ -41,14 +44,15 @@ router.post('/register', async (req, res) => {
             console.log(hashedPassword2)
             const newUser = new User({ username: username, password: hashedPassword });
             await newUser.save();
-            res.status(201).json({ message: 'User created successfully' });
+            // res.status(201).json({ message: 'User created successfully' });
+            return res.status(201).json({redirect:'/homepage.html'});
         }
 
         // If no existing user or password matches, create a new user
         
     } catch (error) {
-        res.status(500).json({ message: 'Error creating user' });
+        // res.status(500).json({ message: 'Error creating user' });
     }
 });
 
-//module.exports = router
+module.exports = router

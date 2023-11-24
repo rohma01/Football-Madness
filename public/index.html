@@ -69,20 +69,23 @@
 <body>
 
     <img src="soccer_goal.jpg" style = "width:100%;"> 
-    <form id="loginForm">
+    <form id="loginForm" class="login">
         <h2> <img src="fantasy_soccer.jpg" style= "width:15%;">Fantasy PL Login</h2>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+        <a>Username</a>
+        <input type="text" id="username" name="username">
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+        <a>Password</a>
+        <input type="text" id="password" name="password">
 
-        <button type="submit">Login</button>
+        <button class="login-button" type="submit">Login/Signup</button>
+        <div class="popup">
+            <span class="popuptext" id="myPopup"></span>
+        </div>
 
-        <p class="switch">Don't have an account? <a href="#" onclick="toggleForm()">Sign up</a></p>
+        <!-- <p class="switch">Don't have an account? <a href="#" onclick="toggleForm()">Sign up</a></p> -->
     </form>
 
-    <form id="signupForm" style="display: none;">
+    <!-- <form id="signupForm" style="display: none;">
         <h2> <img src="fantasy_soccer.jpg" style= "width:15%;">Fantasy PL Sign up</h2>
         <label for="newUsername">Username:</label>
         <input type="text" id="newUsername" name="newUsername" required>
@@ -93,17 +96,17 @@
         <button type="submit">Sign up</button>
 
         <p class="switch">Already have an account? <a href="#" onclick="toggleForm()">Login</a></p>
-    </form>
+    </form> -->
 
-    <script>
+    <!-- <script>
         function toggleForm() {
             
             let signupForm = document.getElementById('signupForm');
 
             signupForm.style.display = (signupForm.style.display === 'none' || signupForm.style.display === '') ? 'block' : 'none';
         }
-    </script>
-
+    </script> -->
+    <script type="text/javascript" src="web.js"></script>
 </body>
 
 </html> 

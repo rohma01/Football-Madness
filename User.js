@@ -1,50 +1,51 @@
 const mongoose = require("mongoose")
 const bcrypt = require('bcrypt')
-
-const userSchema = new mongoose.Schema({
+const playerSchema = new mongoose.Schema({
+    position: String,
+    name: String,
+    rating: Number,
+    totalPoints: {
+      type: Number,
+      default: 0,
+    },
+    averagePoints: {
+      type: Number,
+      default: 0,
+    },
+    realLifeTeam: String,
+  });
+  const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     createdAt: {
-        type: Date,
-        immutable: true,
-        default: () => Date.now()
+      type: Date,
+      immutable: true,
+      default: () => Date.now(),
     },
     wins: {
-        type: Number,
-        min: 0,
-        default: 38
+      type: Number,
+      min: 0,
+      default: 0,
     },
     opponent: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "User"
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "User",
     },
     winPercent: Number,
-    matchHistory: [{
-        opponent: {
-            type: mongoose.SchemaTypes.ObjectId,
-            ref: "User"
-        },
-        score: {
-            userPoints: {
-                type: Number,
-                default: 0
-            },
-            opponentPoints: {
-                type: Number,
-                default: 0
-            },
-            matchWon: {
-                type: Boolean,
-                default: null
-            }
-        },
-        datePlayed: {
-            type: Date,
-            default: Date.now()
-        }
-        // Other properties related to the game if needed
-    }]
-})
+    team: {
+      ST: playerSchema,
+      W1: playerSchema,
+      W2: playerSchema,
+      CAM: playerSchema,
+      CM: playerSchema,
+      CDM: playerSchema,
+      CB1: playerSchema,
+      CB2: playerSchema,
+      FB1: playerSchema,
+      FB2: playerSchema,
+      GK: playerSchema,
+    },
+  });
 
 
 userSchema.methods.sayHi = function() {
