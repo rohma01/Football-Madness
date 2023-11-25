@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 const app = express();
 //hi
 app.use(express.json());
-
+let draftStatus = "notStarted";
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://rohma01:footballmadness@footballmadness.wkclor2.mongodb.net/")
     .then(() => console.log("MongoDB connected"))

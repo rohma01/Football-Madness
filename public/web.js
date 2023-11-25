@@ -23,31 +23,29 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ username, password }),
-            })
-            .then(response => {
+            });
                 if (response.redirected) {
-                    // Handle the redirect
-                    window.location.href = response.url;
+            window.location.href = response.url;;
                 } else {
                     // Handle other responses
-                    return response.json();
-                }
-            })
-            .then(data => {
+                    const data = await response.json();
+                    //return response.json();
+                
                 // Check if the data contains a redirect property
                 if (data && data.redirect) {
+                    const redirectUrl = data.redirect;
+                    const draftStatus = "notStarted"; 
+                    console.log(redirectUrl)
                     // Handle the redirect manually
-                    window.location.href = data.redirect;
+                    window.location.href = `${redirectUrl}?draftStatus=${draftStatus}`;
                 } else {
                     // Handle other JSON data
                     console.log('Received JSON data:', data);
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            }
+        
     
-            const data = await response.json();
+            
             // console.log("Uh oh!")
             // console.log(data.message);
             if(data.message = "Username already taken")
