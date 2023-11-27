@@ -75,6 +75,9 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        button:focus{
+            background-color: red;
+        }
 
     </style>
 </head>
@@ -216,6 +219,7 @@
 
             const user = users[0];
             const positionElement = document.getElementById(`${user}-${position}`);
+            
 
 
             const playerSpan = document.createElement('span');
