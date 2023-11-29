@@ -1,19 +1,8 @@
+
 const mongoose = require("mongoose")
 const bcrypt = require('bcrypt')
-const playerSchema = new mongoose.Schema({
-    position: String,
-    name: String,
-    rating: Number,
-    totalPoints: {
-      type: Number,
-      default: 0,
-    },
-    averagePoints: {
-      type: Number,
-      default: 0,
-    },
-    realLifeTeam: String,
-  });
+const Player = require('./Player')
+
   const userSchema = new mongoose.Schema({
     username: String,
     password: String,
@@ -33,17 +22,17 @@ const playerSchema = new mongoose.Schema({
     },
     winPercent: Number,
     team: {
-      ST: playerSchema,
-      W1: playerSchema,
-      W2: playerSchema,
-      CAM: playerSchema,
-      CM: playerSchema,
-      CDM: playerSchema,
-      CB1: playerSchema,
-      CB2: playerSchema,
-      FB1: playerSchema,
-      FB2: playerSchema,
-      GK: playerSchema,
+      ST: Player.schema,
+      W1: Player.schema,
+      W2: Player.schema,
+      CAM: Player.schema,
+      CM: Player.schema,
+      CDM: Player.schema,
+      CB1: Player.schema,
+      CB2: Player.schema,
+      FB1: Player.schema,
+      FB2: Player.schema,
+      GK: Player.schema,
     },
   });
 

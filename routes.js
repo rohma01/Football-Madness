@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('./User');
 const bcrypt = require('bcrypt')
 const router = express.Router();
+
 router.post('/register', async (req, res) => {
     try { 
         const { username, password } = req.body;
@@ -13,7 +14,7 @@ router.post('/register', async (req, res) => {
         // Check if a user with the same username already exists
         const existingUser = await User.findOne({ username });
 
-        console.log("im here!")
+        console.log("im here!");
 
         if (existingUser) {
             // Check if the inputted password differs from the existing user's password
@@ -28,7 +29,7 @@ router.post('/register', async (req, res) => {
             } else {
                 //sign in the user if they do match!
                 console.log("Welcome back!")
-                return res.status(201).json({redirect:'/homepage.html'});
+                return res.status(201).json({redirect:'/homepage.html', user: existingUser});
                 // return res.status(201).json({ message: 'Welcome back existing user!' });
 
 
@@ -45,7 +46,7 @@ router.post('/register', async (req, res) => {
             const newUser = new User({ username: username, password: hashedPassword });
             await newUser.save();
             // res.status(201).json({ message: 'User created successfully' });
-            return res.status(201).json({redirect:'/homepage.html'});
+            return res.status(201).json({redirect:'/homepage.html', user: newUser});
         }
 
         // If no existing user or password matches, create a new user
@@ -54,5 +55,17 @@ router.post('/register', async (req, res) => {
         // res.status(500).json({ message: 'Error creating user' });
     }
 });
+
+router.post('/draft', async (req, res) => {
+    try{
+        let user = req.body.user;
+        let newUser = await User.findByIdAndUpdate(user._id, user, {
+            new: true
+        });
+        return res.status(201).json(newUser)
+    } catch{
+        return res.status(400).json({message: "Error updating team"})
+    }
+})
 
 module.exports = router

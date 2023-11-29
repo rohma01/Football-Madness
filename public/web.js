@@ -37,25 +37,23 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                     const draftStatus = "notStarted"; 
                     console.log(redirectUrl)
                     // Handle the redirect manually
+                    localStorage.setItem('user', JSON.stringify(data.user));
                     window.location.href = `${redirectUrl}?draftStatus=${draftStatus}`;
-                } else {
-                    // Handle other JSON data
-                    console.log('Received JSON data:', data);
+                } else if(data && data.message == "Username already taken")
+                {
+                    popup.textContent = "Username already taken, please try again!"
+                    popup.classList.add("show");
+                }
+                else {
+                    //login/account creation was a success!
+                    popup.classList.add("hide");
                 }
             }
         
-    
-            
+
             // console.log("Uh oh!")
             // console.log(data.message);
-            if(data.message = "Username already taken")
-            {
-                popup.textContent = "Username already taken, please try again!"
-                popup.classList.add("show");
-            } else {
-                //login/account creation was a success!
-                popup.classList.add("hide");
-            }
+            
             // Handle response
         } catch (error) {
             console.error('Error:', error);
