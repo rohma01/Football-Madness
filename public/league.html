@@ -38,7 +38,7 @@
         <h1>Welcome to your league!</h1>
         <div class="table-container">
           <div class="table-header">
-            <span>Player</span>
+            <span>Users</span>
             <span>Team</span>
             <span>Position</span>
             <span>Points</span>
@@ -51,17 +51,12 @@
             let users; //this has to be the list of all users on the server
             for(let user of users){
               let tableContainer = document.querySelector('.table-container');
+              let row = document.createElement('div');
+              row.classList.add('table-row');
+              row.innerHTML = '<span>' + user.username + '</span>' +
+                              '<span>' + user.position + '</span>' +
+                              '<span>' + user.points + '</span>';
 
-              let userData = user.team;
-              userData.forEach(function(player) {
-                  let row = document.createElement('div');
-                  row.classList.add('table-row');
-                  row.innerHTML = '<span>' + player.player + '</span>' +
-                                  '<span>' + player.team + '</span>' +
-                                  '<span>' + player.position + '</span>' +
-                                  '<span>' + player.points + '</span>';
-                  tableContainer.appendChild(row);
-              });
             }
           </script>
 

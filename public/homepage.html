@@ -78,7 +78,7 @@
 
 <body>
     <div class="background">
-        <div id="name">Vedant</div>
+        <div id="name"></div>
         <h1>Football Madness</h1>
         <div class="directory">
             <a id = "draftButton" href="draft.html"><button>Draft</button></a>
@@ -100,15 +100,28 @@
         </div>
     </div>
     <script type="text/javascript">
+        let name = document.getElementById('name');
+        
         let tableContainer = document.querySelector('.table-container');
+        let currentUser = "Vedant"//JSON.parse(localStorage.getItem('user'))
+        
+        //name.textContent = currentUser.username;
 
         let opponent; //this has to be the current opponent which we have to cycle through somehow
-        let matchup;
-        const Matchup = require("../Matchup")
+        let matchup = {
+            user1: currentUser,
+            user2: "Rohith"
+        };
+        //const Matchup = require("../Matchup")
         let nextButton = document.getElementById("nextWeek")
         nextButton.disabled = true;
-
-        let playersData = user.team;
+        let users = ["Sai","Vedant","Rohith","Khushil"]
+        console.log(users.indexOf(currentUser))
+        let otherUsers = users;
+        otherUsers.splice(1,1);
+        console.log(otherUsers)
+        /*
+        let playersData = currentUser.team;
         playersData.forEach(function(player) {
             let row = document.createElement('div');
             row.classList.add('table-row');
@@ -119,7 +132,7 @@
             tableContainer.appendChild(row);
         });
         
-        let opponentData = opponent.team;
+        let opponentData = matchup.user2;
         opponentData.forEach(function(player) {
             let row = document.createElement('div');
             row.classList.add('table-row');
@@ -129,6 +142,7 @@
                             '<span>' + player.points + '</span>';
             tableContainer.appendChild(row);
         });
+        */
         // Function to get the query parameter by name
         function getQueryParam(name) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -150,26 +164,37 @@
         });
 
         let simButton = document.getElementById("simulate")
-        simButton.addEventListener(function(){
-            simButton.disabled = true;
-            nextButton.disabled = false;
-
+        simButton.addEventListener("click",function(){
+            
+/*
             for(let user of users){
                 for(let player of user.team){
                     //fetch data and post to database
                 }
             }
-            location.reload();
+            */
+            //location.reload();
+            simButton.disabled = true;
+            nextButton.disabled = false;
         })
 
-        nextButton.addEventListener(function(){
+        nextButton.addEventListener("click",function(){
             //logic for the next week functionality
+            let currentOpponent = matchup.user2;
+            let targetIndex = otherUsers.indexOf(currentOpponent)+1
+            if(targetIndex==otherUsers.length){targetIndex=0}
+            for(let x=0; x<otherUsers.length; x++){
+                if(x==targetIndex){
+                    console.log(otherUsers[x])
+                    // matchup = new Matchup({
+                    //     user1: currentUser,
+                    //     user2: otherUsers[x]
+                    // })
+                }
+            }
 
-
-            matchup = new Matchup({
-                user1: currentUser,
-                user2: opponentUser
-            })
+            
+            //location.reload();
         })
 
         
