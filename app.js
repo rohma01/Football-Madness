@@ -1,7 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const userRoutes = require('./routes.js'); // Assuming you have a routes.js file
+const userRoutes = require('./routes.js');
 const bcrypt = require('bcrypt')
+
+
+const users = {
+    "User 1" : new User(),
+    "User 2" : new User()
+}
 
 const app = express();
 //hi

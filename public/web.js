@@ -3,7 +3,6 @@ console.log("web")
 
 document.getElementById("loginForm").addEventListener("submit", async function(event) {
     event.preventDefault(); // Prevent the default form submission
-    console.log('Form submitted');
   
     // Get the value from the input field
     let username = document.getElementById("username").value;
@@ -37,10 +36,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                     const draftStatus = "notStarted"; 
                     console.log(redirectUrl)
                     // Handle the redirect manually
-                    sessionStorage.setItem('user',JSON.stringify(data.user))
-                    // document.cookie = `user=${JSON.stringify(data.user)}`
-                    // console.log(document.cookie)
-                    //localStorage.setItem('user', JSON.stringify(data.user));
+                    localStorage.setItem('user', JSON.stringify(data.user));
                     window.location.href = `${redirectUrl}?draftStatus=${draftStatus}`;
                 } else if(data && data.message == "Username already taken")
                 {

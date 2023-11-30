@@ -6,6 +6,8 @@
 //     #team
 //     #fantasyTeam
 
+const User = require("../User");
+
 //     constructor(name,position,rating,team){
 //         this.#name=name;
 //         this.#position=position;
@@ -472,6 +474,10 @@ function getCookie(cname) {
     }
     console.log(getCookie("user"))
 const users = ["User 1", "User 2", "User 3", "User 4"];
+
+
+
+
 const draftedPlayers = {};
 const user = JSON.parse(localStorage.getItem('user'));
 console.log(user.username)
