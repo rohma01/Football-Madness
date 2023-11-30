@@ -5,10 +5,11 @@ const router = express.Router();
 
 router.post('/register', async (req, res) => {
     try { 
+        console.log("Player Entered")
         const { username, password } = req.body;
 
         if(password.length < 8){
-            return res.status(400).json({ message: 'Password is too short!' });
+            return res.status(400).json({ message: 'Password is too short! Please make it 8 characters long.' });
         }
 
         // Check if a user with the same username already exists
