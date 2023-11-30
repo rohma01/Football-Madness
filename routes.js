@@ -69,6 +69,39 @@ router.post('/draft', async (req, res) => {
     }
 })
 
+router.get('/search/player', async (req, res) => {
+    try {
+        const playerName = req.query.name; // Assuming the player name is passed as a query parameter
+        const player = await Player.findOne({ name: playerName });
+        
+        if (player) {
+            res.status(200).json(player);
+        } else {
+            res.status(404).json({ message: 'Player not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+
+router.get('/search/user', async (req, res) => {
+    try {
+        const username = req.query.username; // Assuming the username is passed as a query parameter
+        const user = await User.findOne({ username });
+        
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 router.get('/Player', async(req, res) =>{
     try{
         
