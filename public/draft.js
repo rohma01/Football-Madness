@@ -1,110 +1,445 @@
-class Player{
-    #name
-    #position
-    #rating
-    #points
-    #team
-    #fantasyTeam
+// class Player{
+//     #name
+//     #position
+//     #rating
+//     #points
+//     #team
+//     #fantasyTeam
 
-    constructor(name,position,rating,team){
-        this.#name=name;
-        this.#position=position;
-        this.#rating=rating;
-        this.#team=team;
-        this.#points=0;
-    }
-    setFantasyTeam(user){
-        this.#fantasyTeam=user;
-    }
-    get name(){return this.#name}
-    get position(){return this.#position}
-    get rating(){return this.#rating}
-    get points(){return this.#points}
-    get team(){return this.#team}
-    get fantasyTeam(){return this.#fantasyTeam}
-    addPoints(p){
-        this.#points+=p;
-    }
-    set team(t){
-        this.#team=t;
-    }
-}
-//const Player = require('../Player')
+//     constructor(name,position,rating,team){
+//         this.#name=name;
+//         this.#position=position;
+//         this.#rating=rating;
+//         this.#team=team;
+//         this.#points=0;
+//     }
+//     setFantasyTeam(user){
+//         this.#fantasyTeam=user;
+//     }
+//     get name(){return this.#name}
+//     get position(){return this.#position}
+//     get rating(){return this.#rating}
+//     get points(){return this.#points}
+//     get team(){return this.#team}
+//     get fantasyTeam(){return this.#fantasyTeam}
+//     addPoints(p){
+//         this.#points+=p;
+//     }
+//     set team(t){
+//         this.#team=t;
+//     }
+// }
+const Player = require("../Player")
 
 const players = [
-                // new Player({
-                //     name: "Kevin DeBruyne",
-                //     position: "CM",
-                //     rating: 91,
-                //     realLifeTeam: "Manchester City"
-                // }),
-                  new Player("Mohamed Salah","W",90,"Liverpool"), 
-                  new Player("Virgil Van Dijk","CB",90,"Liverpool"),
-                  new Player("Cristiano Ronaldo","ST",90,"Manchester United"),
-                  new Player("Heung Min Son","W",89,"Tottenham Hotspur"),
-                  new Player("Casemiro","CDM",89,"Manchester United"),
-                  new Player("Allison","GK",89,"Liverpool"), 
-                  new Player("Harry Kane","ST",89,"Tottenham Hotspur"),
-                  new Player("Ederson","GK",89,"Manchester City"),
-                  new Player("Ngolo Kante","CDM",89,"Chelsea"),
-                  new Player("Erling Haaland","ST",88,"Manchester City"),
-                  new Player("Joao Cancelo","FB",88,"Manchester City"), 
-                  new Player("Ruben Dias","CB",88,"Manchester City"),
-                  new Player("Bernardo Silva","CAM",88,"Manchester City"),
-                  new Player("Fabinho","CDM",87,"Liverpool"),
-                  new Player("Rodri","CDM",87,"Manchester City"),
-                  new Player("Andrew Robertson","FB",87,"Liverpool"), 
-                  new Player("Kalidou Koulibaly","CB",87,"Chelsea"),
-                  new Player("Trent Alexander-Arnold","FB",87,"Liverpool"),
-                  new Player("Hugo LLoris","GK",87,"Tottenham Hotspur"),
-                  new Player("De Gea","GK",87,"Manchester United"),
-                  new Player("Edouard Mendy","GK",86,"Chelsea"), 
-                  new Player("Aymeric Laporte","CB",86,"Manchester City"),
-                  new Player("Raheem Sterling","W",86,"Chelsea"),
-                  new Player("Riyad Mahrez","W",89,"Manchester City"),
-                  new Player("Thiago","CM",89,"Liverpool"),
-                  new Player("Thiago Silva","CB",86,"Chelsea"), 
-                  new Player("Bruno Fernandes","CAM",86,"Manchester United"),
-                  new Player("Ilkay Gundogan","CM",85,"Manchester City"),
-                  new Player("Phil Foden","W",85,"Manchester City"),
-                  new Player("Diogo Jota","ST",85,"Liverpool"),
-                  new Player("Jorginho","CM",85,"Chelsea"), 
-                  new Player("Kyle Walker","FB",85,"Manchester City"),
-                  new Player("Jamie Vardy","ST",85,"Leicester City"),
-                  new Player("Aubameyang","ST",85,"Chelsea"),
-                  new Player("Martin Odegaard","CAM",84,"Arsenal"),
-                  new Player("Mason Mount","CAM",84,"Chelsea"), 
-                  new Player("Declan Rice","CDM",84,"West Ham United"),
-                  new Player("Jack Grealish","W",84,"Manchester City"),
-                  new Player("Ivan Perisic","W",84,"Tottenham Hotspur"),
-                  new Player("Thomas Partey","CDM",84,"Arsenal"),
-                  new Player("Reece James","FB",84,"Chelsea"), 
-                  new Player("Emiliano Martinez","GK",84,"Aston Villa"),
-                  new Player("Mateo Kovacic","CM",84,"Chelsea"),
-                  new Player("Luis Diaz","W",84,"Liverpool"),
-                  new Player("Raphael Varane","CB",84,"Manchester United"),
-                  new Player("Youri Tielemans","CM",84,"Leicester City"), 
-                  new Player("Joel Matip","CB",84,"Liverpool"),
-                  new Player("Wilfred Ndidi","CDM",90,"Leicester City"),
-                  new Player("Kai Havertz","CAM",84,"Chelsea"),
-                  new Player("Jadon Sancho","W",84,"Manchester United"),
-                  new Player("Kieran Trippier","FB",84,"Newcastle United"),
-                  new Player("Roberti Firmino","ST",83,"Liverpool"),
-                  new Player("Jordan Henderson","CM",83,"Liverpool"),
-                  new Player("John Stones","CB",83,"Manchester City"),
-                  new Player("Gabriel Jesus","ST",83,"Arsenal"),
-                  new Player("Hakim Ziyech","W",83,"Chelsea"),
-                  new Player("Ruben Neves","CM",83,"Wolverhampton Wanderers"),
-                  new Player("Pierre-Emile Hojbjerg","CM",83,"Tottenham Hotspur"),
-                  new Player("Ricardo Pereira","FB",83,"Leicester City"),
-                  new Player("Diego Carlos","CB",83,"Aston Villa"),
-                  new Player("Lucas Paqueta","CAM",82,"West Ham United"),
-                  new Player("Kieran Trippier","FB",84,"Newcastle United"),
-                  new Player("Wilfred Zaha","W",82,"Crystal Palace"),
-                  new Player("Lucas Digne","FB",82,"Aston Villa"),
-                  new Player("Ben Chilwell","FB",82,"Chelsea"),
-                  new Player("Bukayo Saka","RW",82,"Arsenal"),
-                  new Player("Idrissa Gueye","CDM",82,"Everton")
+                new Player({
+                    name: "Kevin DeBruyne",
+                    position: "CM",
+                    rating: 91,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Mohamed Salah",
+                    position: "W",
+                    rating: 90,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Virgil Van Dijk",
+                    position: "CB",
+                    rating: 90,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Cristiano Ronaldo",
+                    position: "ST",
+                    rating: 90,
+                    realLifeTeam: "Manchester United"
+                }),
+                new Player({
+                    name: "Heung Min Son",
+                    position: "W",
+                    rating: 89,
+                    realLifeTeam: "Tottenham Hotspur"
+                }),
+                new Player({
+                    name: "Casemiro",
+                    position: "CDM",
+                    rating: 89,
+                    realLifeTeam: "Manchester United"
+                }),
+                new Player({
+                    name: "Allison",
+                    position: "GK",
+                    rating: 89,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Harry Kane",
+                    position: "ST",
+                    rating: 89,
+                    realLifeTeam: "Tottenham Hotspur"
+                }),
+                new Player({
+                    name: "Ederson",
+                    position: "GK",
+                    rating: 89,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Ngolo Kante",
+                    position: "CDM",
+                    rating: 89,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Erling Haaland",
+                    position: "ST",
+                    rating: 88,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Joao Cancelo",
+                    position: "FB",
+                    rating: 88,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Ruben Dias",
+                    position: "CB",
+                    rating: 88,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Bernardo Silva",
+                    position: "CAM",
+                    rating: 88,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Fabinho",
+                    position: "CDM",
+                    rating: 87,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Rodri",
+                    position: "CDM",
+                    rating: 87,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Andrew Robertson",
+                    position: "FB",
+                    rating: 87,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Kalidou Koulibaly",
+                    position: "CB",
+                    rating: 87,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Trent Alexander-Arnold",
+                    position: "FB",
+                    rating: 87,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Hugo Lloris",
+                    position: "GK",
+                    rating: 87,
+                    realLifeTeam: "Tottenham Hotspur"
+                }),
+                new Player({
+                    name: "De Gea",
+                    position: "GK",
+                    rating: 87,
+                    realLifeTeam: "Manchester United"
+                }),
+                new Player({
+                    name: "Edouard Mendy",
+                    position: "GK",
+                    rating: 86,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Aymeric Laporte",
+                    position: "CB",
+                    rating: 86,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Raheem Sterling",
+                    position: "W",
+                    rating: 86,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Riyad Mahrez",
+                    position: "W",
+                    rating: 89,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Thiago",
+                    position: "CM",
+                    rating: 89,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Thiago Silva",
+                    position: "CB",
+                    rating: 86,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Bruno Fernandes",
+                    position: "CAM",
+                    rating: 86,
+                    realLifeTeam: "Manchester United"
+                }),
+                new Player({
+                    name: "Ilkay Gundogan",
+                    position: "CM",
+                    rating: 85,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Phil Foden",
+                    position: "W",
+                    rating: 85,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Diogo Jota",
+                    position: "ST",
+                    rating: 85,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Jorginho",
+                    position: "CM",
+                    rating: 85,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Kyle Walker",
+                    position: "FB",
+                    rating: 85,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Jamie Vardy",
+                    position: "ST",
+                    rating: 85,
+                    realLifeTeam: "Leicester City"
+                }),
+                new Player({
+                    name: "Aubameyang",
+                    position: "ST",
+                    rating: 85,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Martin Odegaard",
+                    position: "CAM",
+                    rating: 84,
+                    realLifeTeam: "Arsenal"
+                }),
+                new Player({
+                    name: "Mason Mount",
+                    position: "CAM",
+                    rating: 84,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Declan Rice",
+                    position: "CDM",
+                    rating: 84,
+                    realLifeTeam: "West Ham United"
+                }),
+                new Player({
+                    name: "Jack Grealish",
+                    position: "W",
+                    rating: 84,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Ivan Perisic",
+                    position: "W",
+                    rating: 84,
+                    realLifeTeam: "Tottenham Hotspur"
+                }),
+                new Player({
+                    name: "Thomas Partey",
+                    position: "CDM",
+                    rating: 84,
+                    realLifeTeam: "Arsenal"
+                }),
+                new Player({
+                    name: "Reece James",
+                    position: "FB",
+                    rating: 84,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Emiliano Martinez",
+                    position: "GK",
+                    rating: 84,
+                    realLifeTeam: "Aston Villa"
+                }),
+                new Player({
+                    name: "Mateo Kovacic",
+                    position: "CM",
+                    rating: 84,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Luis Diaz",
+                    position: "W",
+                    rating: 84,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Raphael Varane",
+                    position: "CB",
+                    rating: 84,
+                    realLifeTeam: "Manchester United"
+                }),
+                new Player({
+                    name: "Youri Tielemans",
+                    position: "CM",
+                    rating: 84,
+                    realLifeTeam: "Leicester City"
+                }),
+                new Player({
+                    name: "Joel Matip",
+                    position: "CB",
+                    rating: 84,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Wilfred Ndidi",
+                    position: "CDM",
+                    rating: 90,
+                    realLifeTeam: "Leicester City"
+                }),
+                new Player({
+                    name: "Kai Havertz",
+                    position: "CAM",
+                    rating: 84,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Jadon Sancho",
+                    position: "W",
+                    rating: 84,
+                    realLifeTeam: "Manchester United"
+                }),
+                new Player({
+                    name: "Kieran Trippier",
+                    position: "FB",
+                    rating: 84,
+                    realLifeTeam: "Newcastle United"
+                }),
+                new Player({
+                    name: "Roberto Firmino",
+                    position: "ST",
+                    rating: 83,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "Jordan Henderson",
+                    position: "CM",
+                    rating: 83,
+                    realLifeTeam: "Liverpool"
+                }),
+                new Player({
+                    name: "John Stones",
+                    position: "CB",
+                    rating: 83,
+                    realLifeTeam: "Manchester City"
+                }),
+                new Player({
+                    name: "Gabriel Jesus",
+                    position: "ST",
+                    rating: 83,
+                    realLifeTeam: "Arsenal"
+                }),
+                new Player({
+                    name: "Hakim Ziyech",
+                    position: "W",
+                    rating: 83,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Ruben Neves",
+                    position: "CM",
+                    rating: 83,
+                    realLifeTeam: "Wolverhampton Wanderers"
+                }),
+                new Player({
+                    name: "Pierre-Emile Hojbjerg",
+                    position: "CM",
+                    rating: 83,
+                    realLifeTeam: "Tottenham Hotspur"
+                }),
+                new Player({
+                    name: "Ricardo Pereira",
+                    position: "FB",
+                    rating: 83,
+                    realLifeTeam: "Leicester City"
+                }),
+                new Player({
+                    name: "Diego Carlos",
+                    position: "CB",
+                    rating: 83,
+                    realLifeTeam: "Aston Villa"
+                }),
+                new Player({
+                    name: "Lucas Paqueta",
+                    position: "CAM",
+                    rating: 82,
+                    realLifeTeam: "West Ham United"
+                }),
+                new Player({
+                    name: "Kieran Trippier",
+                    position: "FB",
+                    rating: 84,
+                    realLifeTeam: "Newcastle United"
+                }),
+                new Player({
+                    name: "Wilfried Zaha",
+                    position: "W",
+                    rating: 82,
+                    realLifeTeam: "Crystal Palace"
+                }),
+                new Player({
+                    name: "Lucas Digne",
+                    position: "FB",
+                    rating: 82,
+                    realLifeTeam: "Aston Villa"
+                }),
+                new Player({
+                    name: "Ben Chilwell",
+                    position: "FB",
+                    rating: 82,
+                    realLifeTeam: "Chelsea"
+                }),
+                new Player({
+                    name: "Bukayo Saka",
+                    position: "RW",
+                    rating: 82,
+                    realLifeTeam: "Arsenal"
+                }),
+                new Player({
+                    name: "Idrissa Gueye",
+                    position: "CDM",
+                    rating: 82,
+                    realLifeTeam: "Everton"
+                })
 ];
 
 const users = ["User 1", "User 2", "User 3", "User 4"];
