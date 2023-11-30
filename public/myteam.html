@@ -43,16 +43,18 @@
 
 <script>
   // Replace this with the actual data source
-  var playersData = [
-    { player: 'John Doe', team: 'FC Barcelona', position: 'Forward', points: 50 },
-    { player: 'Jane Smith', team: 'Real Madrid', position: 'Midfielder', points: 40 },
-    // Add more player data objects here
-  ];
+  let playersData = [];
 
-  var tableContainer = document.querySelector('.table-container');
+  for(let x of user.team){
+    playersData.push(
+      {player: x.name, team: x.realLifeTeam, position: x.position, points: x.points}
+    )
+  }
+
+  let tableContainer = document.querySelector('.table-container');
 
   playersData.forEach(function(player) {
-    var row = document.createElement('div');
+    let row = document.createElement('div');
     row.classList.add('table-row');
     row.innerHTML = '<span>' + player.player + '</span>' +
                     '<span>' + player.team + '</span>' +

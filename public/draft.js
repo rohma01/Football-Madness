@@ -492,8 +492,18 @@ async function draftPlayer(playerName,position) {
     //add player to user's team
     // player
     // user.team[player.position] = player
+    let validDraft;
+    for(let x of user.team){
+        if(x==player.position){
+            validDraft = false;
+            break;
+        }
+    }
+    if(validDraft){
+        user.team[player.position] = player;
+    }
 
-    if (user.team.length == 12) {
+    if (user.team.length == 11) {
         try {
             const response = await fetch('/draft', {
                 method: 'POST',

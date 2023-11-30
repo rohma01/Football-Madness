@@ -85,26 +85,50 @@
             <a id = "myteamButton" href="myteam.html"><button>Matchup</button></a>
             <a id = "leagueButton" href="league.html"><button>League</button></a>
         </div>
-        <table id="myTeam">
-            <tr>
-                <th>Player</th>
-                <th>Team</th>
-                <th>Position</th>
-                <th>Points</th>
-            </tr>
-            <tr>
-                <td>Cristiano Ronaldo</td>
-                <td>Manchester United</td>
-                <td>ST</td>
-                <td>0.0</td>
-            </tr>
-        </table>
+        <div class="table-container">
+            <div class="table-header">
+              <span>Player</span>
+              <span>Team</span>
+              <span>Position</span>
+              <span>Points</span>
+            </div>
+            <!-- Table rows will be added here -->
+          </div>
         <div class="advance">
-            <button>SIM</button>
-            <button>NEXT WEEK</button>
+            <button id="simulate">SIM</button>
+            <button id="nextWeek">NEXT WEEK</button>
         </div>
     </div>
-    <script>
+    <script type="text/javascript">
+        let tableContainer = document.querySelector('.table-container');
+
+        let opponent; //this has to be the current opponent which we have to cycle through somehow
+        let matchup;
+        const Matchup = require("../Matchup")
+        let nextButton = document.getElementById("nextWeek")
+        nextButton.disabled = true;
+
+        let playersData = user.team;
+        playersData.forEach(function(player) {
+            let row = document.createElement('div');
+            row.classList.add('table-row');
+            row.innerHTML = '<span>' + player.player + '</span>' +
+                            '<span>' + player.team + '</span>' +
+                            '<span>' + player.position + '</span>' +
+                            '<span>' + player.points + '</span>';
+            tableContainer.appendChild(row);
+        });
+        
+        let opponentData = opponent.team;
+        opponentData.forEach(function(player) {
+            let row = document.createElement('div');
+            row.classList.add('table-row');
+            row.innerHTML = '<span>' + player.player + '</span>' +
+                            '<span>' + player.team + '</span>' +
+                            '<span>' + player.position + '</span>' +
+                            '<span>' + player.points + '</span>';
+            tableContainer.appendChild(row);
+        });
         // Function to get the query parameter by name
         function getQueryParam(name) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -125,8 +149,30 @@
             }
         });
 
-        const user = JSON.parse(localStorage.getItem('user'));
-        console.log(user)
+        let simButton = document.getElementById("simulate")
+        simButton.addEventListener(function(){
+            simButton.disabled = true;
+            nextButton.disabled = false;
+
+            for(let user of users){
+                for(let player of user.team){
+                    //fetch data and post to database
+                }
+            }
+            location.reload();
+        })
+
+        nextButton.addEventListener(function(){
+            //logic for the next week functionality
+
+
+            matchup = new Matchup({
+                user1: currentUser,
+                user2: opponentUser
+            })
+        })
+
+        
     </script>
 </body>
 
