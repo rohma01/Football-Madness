@@ -37,7 +37,10 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                     const draftStatus = "notStarted"; 
                     console.log(redirectUrl)
                     // Handle the redirect manually
-                    localStorage.setItem('user', JSON.stringify(data.user));
+                    sessionStorage.setItem('user',JSON.stringify(data.user))
+                    // document.cookie = `user=${JSON.stringify(data.user)}`
+                    // console.log(document.cookie)
+                    //localStorage.setItem('user', JSON.stringify(data.user));
                     window.location.href = `${redirectUrl}?draftStatus=${draftStatus}`;
                 } else if(data && data.message == "Username already taken")
                 {

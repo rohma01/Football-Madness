@@ -69,6 +69,11 @@ router.post('/draft', async (req, res) => {
     }
 })
 
+router.get('/Player', async(req, res) =>{
+    try{
+        
+    }
+})
 
 
 module.exports = router
