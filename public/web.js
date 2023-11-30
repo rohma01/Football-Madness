@@ -60,3 +60,16 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         }
     }
 });
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    // Check if the user is logged in
+    if (user) {
+        console.log(`Logged in as ${user.username}`);
+        // Add your logic for handling a logged-in user on the draft.html page
+    } else {
+        console.log("User not logged in");
+        // Redirect to the login page or handle accordingly
+    }
+});
