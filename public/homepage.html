@@ -186,10 +186,10 @@
             for(let x=0; x<otherUsers.length; x++){
                 if(x==targetIndex){
                     console.log(otherUsers[x])
-                    // matchup = new Matchup({
-                    //     user1: currentUser,
-                    //     user2: otherUsers[x]
-                    // })
+                    matchup = {
+                        user1: currentUser,
+                        user2: otherUsers[x]
+                    }
                 }
             }
 
