@@ -37,6 +37,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                     console.log(redirectUrl)
                     // Handle the redirect manually
                     localStorage.setItem('user', JSON.stringify(data.user));
+                    console.log(localStorage.getItem("user"))
                     window.location.href = `${redirectUrl}?draftStatus=${draftStatus}`;
                 } else if(data && data.message == "Username already taken")
                 {
@@ -59,6 +60,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         }
     }
 });
+
 
 document.addEventListener("DOMContentLoaded", async function () {
     const user = JSON.parse(localStorage.getItem('user'));

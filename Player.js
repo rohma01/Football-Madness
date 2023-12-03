@@ -24,10 +24,11 @@ const playerSchema = new mongoose.Schema({
       type: Number,
       default: 0,
     },
-    fantasyTeam: {
-        type: String,
-        default: " ",
+    FBref_id: {
+      type: String,
+      default: "",
     }
+    
 })
 
 module.exports = mongoose.model("Player", playerSchema);

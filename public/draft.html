@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premier League Draft</title>
-    
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
             display: flex;
             flex-wrap: wrap;
+            height: 100vh;
         }
 
         h1 {
@@ -24,11 +26,16 @@
         }
 
         #playerList {
-            margin-top: 20px;
-            width: 50%;
+            overflow-y: scroll;
+            width: 100vw;
+            height: 50vh;
             box-sizing: border-box;
+            padding: 20px;
         }
+        .playerDrafted{
 
+            background-color: blue;
+        }
         .player {
             margin-bottom: 10px;
             padding: 8px;
@@ -41,26 +48,54 @@
         }
 
         #userDrafts {
-            margin-top: 20px;
-            width: 25%;
-            margin-left: auto; /* Add this line to push it to the right */
-            box-sizing: border-box;
-        }
-
-        .userDraft {
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            display: flex;
+            align-items: center;
             padding: 10px;
-            width: 100%;
             box-sizing: border-box;
+            margin-top: 20px; /* Add margin to separate the user drafts from the player list */
+        }
+        .div{
+            color: blue;
         }
 
-        .userTitle {
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-align: center;
-        }
+#userDraft {
+    width: 250px; /* Occupy full width */
+    margin-left: 100px; /* Add margin for spacing between user drafts */
+    
+}
+
+#userBox1 {
+    height: 500px; /* Adjust the height as needed */
+    width: 300px;
+    border: 1px solid black;
+    box-sizing: border-box;
+
+}
+#userBox2 {
+    height: 500px; /* Adjust the height as needed */
+    width: 300px;
+    border: 1px solid black;
+    box-sizing: border-box;
+ 
+}
+#userBox3 {
+    height: 500px; /* Adjust the height as needed */
+    width: 300px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    
+}
+#userBox4 {
+    height: 500px; /* Adjust the height as needed */
+    width: 300px;
+    border: 1px solid black;
+    box-sizing: border-box;
+ 
+}
+
+
+
+        
 
         .positionDraft {
             display: flex;
@@ -76,30 +111,48 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
+        
     </style>
 </head>
+
 <body>
+
     <h1>Premier League Draft</h1>
-    <div id="container"></div>
+    <div id="container">
         <div id="playerList">
             <!-- Player list will be dynamically generated here -->
         </div>
-
-        <div id="userDrafts">
-            <!-- User draft section will be dynamically generated here -->
-        </div>
-
     </div>
 
-    <script type="module" >
-        import Player from "../Player";
-    </script>
+        <div id="userDrafts">
+            <div id="userDraft">
+                <div id="userBox1">
+                    <h1 id="userTitle">Team 1</h1>
+                </div>
+            </div>
+            <div id="userDraft">
+                <div id="userBox2">
+                    <h1 id="userTitle">Team 2</h1>
+                </div>
+            </div>
+            <div id="userDraft">
+                <div id="userBox3">
+                    <h1 id="userTitle">Team 3</h1>
+                </div>
+            </div>
+            <div id="userDraft">
+                <div id="userBox4">
+                    <h1 id="userTitle">Team 4</h1>
+                </div>
+            </div>
+        </div>
+    
+    
+
     <script type="text/javascript" src="draft.js">
 
     </script>
-    
-
 
 </body>
+
 </html>

@@ -10,7 +10,7 @@ const Player = require('./Player')
       immutable: true,
       default: () => Date.now(),
     },
-    wins: {
+    wins: { 
       type: Number,
       min: 0,
       default: 0,
@@ -21,17 +21,18 @@ const Player = require('./Player')
     },
     winPercent: Number,
     team: {
-      ST: Player.schema,
-      RW: Player.schema,
-      LW: Player.schema,
-      CAM: Player.schema,
-      CM: Player.schema,
-      CDM: Player.schema,
-      RCB: Player.schema,
-      LCB: Player.schema,
-      RB: Player.schema,
-      LB: Player.schema,
-      GK: Player.schema,
+      //ST: Player.schema,
+      ST:{ type: Player.schema, default: new Player()},
+      RW:{ type: Player.schema, default: new Player()},
+      LW:{ type: Player.schema, default: new Player()},
+      CAM:{ type: Player.schema, default: new Player()},
+      CM:{ type: Player.schema, default: new Player()},
+      CDM:{ type: Player.schema, default: new Player()},
+      RCB:{ type: Player.schema, default: new Player()},
+      LCB:{ type: Player.schema, default: new Player()},
+      RB:{ type: Player.schema, default: new Player()},
+      LB:{ type: Player.schema, default: new Player()},
+      GK:{ type: Player.schema, default: new Player()}
     },
   });
 
