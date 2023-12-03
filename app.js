@@ -2,8 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes.js');
 const bcrypt = require('bcrypt')
+const http = require('http');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const socketIO = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server);
 //hi
 app.use(express.json());
 let draftStatus = "notStarted";
@@ -13,17 +19,33 @@ mongoose.connect("mongodb+srv://rohma01:footballmadness@footballmadness.wkclor2.
     .catch(err => console.error("MongoDB connection error:", err));
 
 app.use(userRoutes); // Use routes
+let userCount=0;
 
-const PORT = process.env.PORT || 3000; //
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+
 
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
     res.render('index');
+});
+
+io.on('connection', (socket) => {
+    console.log('User connected:', socket.id);
+  
+    socket.on('joinRoom', (roomName) => {
+      userCount++;
+      roomName = Math.ceil(userCount/4)
+      socket.join(roomName);
+      console.log(`User ${socket.id} joined room ${roomName}`);
+    });
+  
+    // Handle other events
+  });
+
+  const PORT = process.env.PORT || 3000; //
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
 
