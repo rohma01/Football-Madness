@@ -1,8 +1,6 @@
 var popup = document.getElementById("myPopup");
 console.log("web")
 
-const socket = io();
-
 document.getElementById("loginForm").addEventListener("submit", async function(event) {
     event.preventDefault(); // Prevent the default form submission
   
@@ -26,7 +24,6 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                 body: JSON.stringify({ username, password }),
             });
                 if (response.redirected) {
-                    console.log("eeeeeeeeee")
             window.location.href = response.url;;
                 } else {
                     // Handle other responses
@@ -39,19 +36,15 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
                     const draftStatus = "notStarted"; 
                     console.log(redirectUrl)
                     // Handle the redirect manually
-                    socket.emit('joinRoom', 'roomName');
                     localStorage.setItem('user', JSON.stringify(data.user));
-                    console.log("aindwnaodaiw")
                     console.log(localStorage.getItem("user"))
                     window.location.href = `${redirectUrl}?draftStatus=${draftStatus}`;
                 } else if(data && data.message == "Username already taken")
                 {
-                    console.log('uuuuuuuuu');
                     popup.textContent = "Username already taken, please try again!"
                     popup.classList.add("show");
                 }
                 else {
-                    console.log("vvvvvvvvv")
                     //login/account creation was a success!
                     popup.classList.add("hide");
                 }

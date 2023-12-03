@@ -32,6 +32,9 @@
 // }
 let turn=0;
 
+//login as 4 diff users
+//refresh page every second
+
 const players = [
                 {
                     name: "Kevin DeBruyne",
@@ -796,8 +799,15 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         updateDraftingBoxBackground(turn);
     }
 
-    
+    console.log(user.team);
 
+    const response = await fetch('/draft', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({user, playerName, position, rating, realLifeTeam, FBref_id}),
+    });
 
     
 
@@ -829,7 +839,7 @@ function removePlayer(playerName) {
         const playerDiv = playerListDiv.children[i];
         const playerSpan = playerDiv.querySelector('span');
         const nameInList = playerSpan.textContent.split(' - ')[0].trim();
-        console.log(nameInList)
+   
         if (nameInList === playerName) {
             // Remove the player from the player list
             playerListDiv.removeChild(playerDiv);

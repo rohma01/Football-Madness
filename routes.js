@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('./User');
+const Player = require('./Player');
 const bcrypt = require('bcrypt')
 const router = express.Router();
 let users = []
@@ -33,7 +34,7 @@ router.post('/register', async (req, res) => {
                 if (!users.includes(existingUser.username)){
                     users.push(existingUser.username)
                 }
-                console.log("heruahud")
+                console.log(users)
                 return res.status(201).json({redirect:'/homepage.html', user: existingUser});
                 // return res.status(201).json({ message: 'Welcome back existing user!' });
 
@@ -45,14 +46,20 @@ router.post('/register', async (req, res) => {
             console.log("created new user!")
 
             const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
-            const hashedPassword2 = await bcrypt.hash(password, 10); // Hash the password
+            //const hashedPassword2 = await bcrypt.hash(password, 10); // Hash the password
             // console.log(hashedPassword)
             // console.log(hashedPassword2)
+            
             const newUser = new User({ username: username, password: hashedPassword  });
             await newUser.save();
             if (!users.includes(existingUser.username)){
                 users.push(existingUser.username)
             }
+            console.log(users)
+            
+            //await newUser.save();
+            
+           
             // res.status(201).json({ message: 'User created successfully' });
             console.log("here")
             return res.status(201).json({redirect:'/homepage.html', user: newUser});
@@ -64,13 +71,58 @@ router.post('/register', async (req, res) => {
         // res.status(500).json({ message: 'Error creating user' });
     }
 });
-
+router.get('/retrieveDraftedPlayers', async (req, res) => {
+    //returns list of player names already in database
+});
+router.get('/retrieveUserTurn', async (req, res) => {
+    //
+});
 router.post('/draft', async (req, res) => {
     try{
-        let user = req.body.user;
+        const {user, playerName, position, rating, realLifeTeam, FBref_id }=req.body;
+        console.log(user.username);
+        console.log(position);
         let newUser = await User.findByIdAndUpdate(user._id, user, {
             new: true
         });
+        console.log(position=="CM")
+        const player = new Player({position: position, name: playerName, rating: rating, raelLifeTeam: realLifeTeam, FBref_id:  FBref_id})
+        await player.save();
+        if (position=="ST"){
+            newUser.team.ST = player;
+        }
+        if (position=="RW"){
+            newUser.team.RW = player;
+        }
+        if (position=="LW"){
+            newUser.team.LW = player;
+        }
+        if (position=="CAM"){
+            newUser.team.CAM = player;
+        }
+        if (position=="CM"){
+            newUser.team.CM = player;
+        }
+        if (position=="CDM"){
+            newUser.team.CDM = player;
+        }
+        if (position=="RB"){
+            newUser.team.RB = player;
+        }
+        if (position=="LB"){
+            newUser.team.LB = player;
+        }
+        if (position=="RCB"){
+            newUser.team.RCB = player;
+        }
+        if (position=="LCB"){
+            newUser.team.LCB = player;
+        }
+        if (position=="GK"){
+            newUser.team.GK = player;
+        }
+        console.log(newUser.team.CM);
+        await newUser.save();
         return res.status(201).json(newUser)
     } catch{
         return res.status(400).json({message: "Error updating team"})
