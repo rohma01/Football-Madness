@@ -35,15 +35,15 @@ app.get('/', (req, res) => {
 
 const Player = require('./Player');
 
-app.get('/draft', async (req, res) => {
-    try {
-        const players = await initializePlayerPool();
-        res.render('draft', { players });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
+// app.get('/draft', async (req, res) => {
+//     try {
+//         const players = await initializePlayerPool();
+//         res.render('draft', { players });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal Server Error' });
+//     }
+// });
 
 app.post('/draft/pick', async (req, res) => {
     try {

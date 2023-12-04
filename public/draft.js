@@ -534,7 +534,7 @@ console.log(user.username)
 // Function to generate player list
 function generatePlayerList() {
     const playerListDiv = document.getElementById('playerList');
-
+    playerListDiv.innerHTML = '';
     players.forEach(player => {
         const playerDiv = document.createElement('div');
         playerDiv.classList.add('player');
@@ -550,7 +550,7 @@ function generatePlayerList() {
 
 function updateDraftedPlayerList(position) {
     // Get the container for the drafted players
-    const draftedPlayersContainer = document.getElementById(`userBox${turn + 1}`);
+    const draftedPlayersContainer = document.getElementById(`userBox1`);
     
 
     // Iterate through the positions and update the display
@@ -665,7 +665,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.ST.rating=rating
         user.team.ST.realLifeTeam=realLifeTeam
         user.team.ST.FBref_id=FBref_id
-        removePlayer(playerName);
+        
         validPick=true;
         updateDraftedPlayerList(position);
         //console.log(user.team.ST.FBref_i
@@ -679,7 +679,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.RW.rating=rating
         user.team.RW.realLifeTeam=realLifeTeam
         user.team.RW.FBref_id=FBref_id
-        removePlayer(playerName);
+      
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.RW.FBref_id)
@@ -691,7 +691,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.LW.rating=rating
         user.team.LW.realLifeTeam=realLifeTeam
         user.team.LW.FBref_id=FBref_id
-        removePlayer(playerName);
+        
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.LW.FBref_id)
@@ -703,7 +703,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.CAM.rating=rating
         user.team.CAM.realLifeTeam=realLifeTeam
         user.team.CAM.FBref_id=FBref_id
-        removePlayer(playerName);
+    
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.CAM.FBref_id)
@@ -715,7 +715,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.CM.rating=rating
         user.team.CM.realLifeTeam=realLifeTeam
         user.team.CM.FBref_id=FBref_id
-        removePlayer(playerName);
+
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.CM.FBref_id)
@@ -727,7 +727,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.CDM.rating=rating
         user.team.CDM.realLifeTeam=realLifeTeam
         user.team.CDM.FBref_id=FBref_id;
-        removePlayer(playerName);
+     
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.CDM.FBref_id)
@@ -739,7 +739,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.RCB.rating=rating
         user.team.RCB.realLifeTeam=realLifeTeam
         user.team.RCB.FBref_id=FBref_id
-        removePlayer(playerName);
+    
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.RCB.FBref_id)
@@ -751,7 +751,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.LCB.rating=rating
         user.team.LCB.realLifeTeam=realLifeTeam
         user.team.LCB.FBref_id=FBref_id
-        removePlayer(playerName);
+      
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.LCB.FBref_id)
@@ -763,7 +763,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.RB.rating=rating
         user.team.RB.realLifeTeam=realLifeTeam
         user.team.RB.FBref_id=FBref_id
-        removePlayer(playerName);
+       
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.RB.FBref_id)
@@ -775,7 +775,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.LB.rating=rating
         user.team.LB.realLifeTeam=realLifeTeam
         user.team.LB.FBref_id=FBref_id
-        removePlayer(playerName);
+   
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.team.LB.FBref_id)
@@ -787,7 +787,7 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         user.team.GK.rating=rating
         user.team.GK.realLifeTeam=realLifeTeam
         user.team.GK.FBref_id=FBref_id
-        removePlayer(playerName);
+     
         updateDraftedPlayerList(position);
         validPick=true;
         //console.log(user.username);
@@ -800,14 +800,50 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
     }
 
     console.log(user.team);
+    const response2 = await fetch('/stats', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({FBref_id}),
+    });
+    let fpoints = "";
+    if (response2.ok){
+        const data = await response2.json();
+        const goals = data.goals.split(' ');
+        const assists = data.assists.split(' ');
+        const shots= data.shots.split(' ');
+        const touches = data.touches.split(' ');
+        const tackles = data.tackles.split(' ');
+        const passComplete = data.passComplete.split(' ');
+        const saves= data.saves.split(' ');
+        const goalsAgainst = data.goalsAgainst.split(' ');
+        console.log("goal: ", goals)
+        console.log("assist: ",assists);
+        console.log("shots: ", shots);
+        console.log("touches: ",touches);
+        console.log("tackles: ", tackles);
+        console.log("passComplete: ",passComplete);
+        console.log("saves: ", saves);
+        console.log("goalsAgainst: ",goalsAgainst);
+       
+        for (let i = 0; i<8; i++){
+            
+            fpoints += ((parseInt(goals[i])*10)+(parseInt(assists[i])*4)+(parseInt(shots[i]))+(parseInt(touches[i])*0.1))+" ";
+        }
+        console.log(fpoints)
+    }
 
     const response = await fetch('/draft', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({user, playerName, position, rating, realLifeTeam, FBref_id}),
+        body: JSON.stringify({user, playerName, position, rating, realLifeTeam, FBref_id, fpoints}),
     });
+
+    
+
 
     
 
@@ -839,7 +875,7 @@ function removePlayer(playerName) {
         const playerDiv = playerListDiv.children[i];
         const playerSpan = playerDiv.querySelector('span');
         const nameInList = playerSpan.textContent.split(' - ')[0].trim();
-   
+        console.log(nameI)
         if (nameInList === playerName) {
             // Remove the player from the player list
             playerListDiv.removeChild(playerDiv);
@@ -848,7 +884,38 @@ function removePlayer(playerName) {
     }
 }
 
+// Identify the element to refresh (replace with your actual selector)
+//const elementToRefresh = document.getElementById('playerList');
+// let playersDrafted=[]
+// // Function to fetch and update the element with new content
+// function updateElement() {
+//   // Send an AJAX request to your server (replace with your actual URL)
+//   fetch(`/retrieveDraftedPlayers`)
+//     .then(response => response.json())
+//     .then(data => {
+//       // Update the element's innerHTML with the fetched data
+//       playersDrafted = data.playersDrafted.join(', ');
+//       //elementToRefresh.innerHTML = data.content;
+//     });
+//     console.log(playersDrafted);
+//     for (let i=0; i<playersDrafted.length; i++){
+//         //removePlayer(playerName)
+//     }
 
+//     fetch('/retrieveUserTurn')
+//     .then(response => response.json())
+//     .then(data => {
+
+//       // Update the element's innerHTML with the fetched data
+//       elementToRefresh.innerHTML = data.content;
+//     });
+// }
+
+// // Set an interval to call the update function every second
+// const intervalId = setInterval(updateElement, 1000);
+
+// // Optionally, clear the interval when the page is unloaded
+// window.addEventListener('unload', () => clearInterval(intervalId));
 
 
 
@@ -857,6 +924,8 @@ function removePlayer(playerName) {
 window.onload = function () {
     generatePlayerList();
     updateDraftingBoxBackground(turn);
+
+    
     //generateUserDrafts();
     //updateDraftedPlayerList();
 };

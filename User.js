@@ -34,6 +34,7 @@ const Player = require('./Player')
       LB:{ type: Player.schema, default: new Player()},
       GK:{ type: Player.schema, default: new Player()}
     },
+    
   });
 
 

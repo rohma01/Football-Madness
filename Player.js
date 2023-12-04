@@ -27,6 +27,10 @@ const playerSchema = new mongoose.Schema({
     FBref_id: {
       type: String,
       default: "",
+    },
+    fpoints: {
+      type: String,
+      default: "",
     }
     
 })

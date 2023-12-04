@@ -1,8 +1,11 @@
+const axios = require('axios');
+const cheerio = require('cheerio');
 const express = require('express');
 const User = require('./User');
 const Player = require('./Player');
 const bcrypt = require('bcrypt')
 const router = express.Router();
+const MongoClient = require('mongodb').MongoClient;
 let users = []
 router.post('/register', async (req, res) => {
     try { 
@@ -32,7 +35,7 @@ router.post('/register', async (req, res) => {
                 //sign in the user if they do match!
                 console.log("Welcome back!")
                 if (!users.includes(existingUser.username)){
-                    users.push(existingUser.username)
+                    users.push(existingUser)
                 }
                 console.log(users)
                 return res.status(201).json({redirect:'/homepage.html', user: existingUser});
@@ -53,9 +56,9 @@ router.post('/register', async (req, res) => {
             const newUser = new User({ username: username, password: hashedPassword  });
             await newUser.save();
             if (!users.includes(existingUser.username)){
-                users.push(existingUser.username)
+                users.push(existingUser)
             }
-            console.log(users)
+            //console.log(users)
             
             //await newUser.save();
             
@@ -71,22 +74,73 @@ router.post('/register', async (req, res) => {
         // res.status(500).json({ message: 'Error creating user' });
     }
 });
-router.get('/retrieveDraftedPlayers', async (req, res) => {
-    //returns list of player names already in database
-});
-router.get('/retrieveUserTurn', async (req, res) => {
-    //
-});
+// router.get('/retrieveDraftedPlayers', async (req, res) => {
+//     //returns list of player names already in database
+//     //get user here
+//     try{
+//     let playersDrafted = []
+//     playersDrafted.push(users[0].team.CM.name);
+//     console.log(playersDrafted)
+//     console.log(users.length);
+//     // for (let i=0; i<users.length; i++){
+//     //     let currUser = users[i];
+//     //     //console.log(currUser.team.CM);
+        
+//     //     if (currUser.team.ST.name!==" "){
+//     //         playersDrafted.push(currUser.team.ST.name);
+//     //     }
+//     //     if (currUser.team.RW.name!==" "){
+//     //         playersDrafted.push(currUser.team.RW.name);
+//     //     }
+//     //     if (currUser.team.LW.name!==" "){
+//     //         playersDrafted.push(currUser.team.LW.name);
+//     //     }
+//     //     if (currUser.team.CAM.name!==" "){
+//     //         playersDrafted.push(currUser.team.CAM.name);
+//     //     }
+//     //     if (currUser.team.CM.name!==" "){
+//     //         playersDrafted.push(currUser.team.CM.name);
+//     //     }
+//     //     if (currUser.team.CDM.name!==" "){
+//     //         playersDrafted.push(currUser.team.CDM.name);
+//     //     }
+//     //     if (currUser.team.RB.name!==" "){
+//     //         playersDrafted.push(currUser.team.RB.name);
+//     //     }
+//     //     if (currUser.team.LB.name!==" "){
+//     //         playersDrafted.push(currUser.team.LB.name);
+//     //     }
+//     //     if (currUser.team.RCB.name!==" "){
+//     //         playersDrafted.push(currUser.team.RCB.name);
+//     //     }
+//     //     if (currUser.team.LCB.name!==" "){
+//     //         playersDrafted.push(currUser.team.LCB.name);
+//     //     }
+//     //     if (currUser.team.GK.name!==" "){
+//     //         playersDrafted.push(currUser.team.GK.name);
+//     //     }
+           
+//     // }
+//     res.status(200).json({ playersDrafted });
+// } catch (error) {
+//     // Handle errors appropriately, e.g., send an error response
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+// }
+// });
+// router.get('/retrieveUserTurn', async (req, res) => {
+//     //
+// });
 router.post('/draft', async (req, res) => {
     try{
-        const {user, playerName, position, rating, realLifeTeam, FBref_id }=req.body;
-        console.log(user.username);
-        console.log(position);
+        const {user, playerName, position, rating, realLifeTeam, FBref_id, fpoints }=req.body;
+        
+   
         let newUser = await User.findByIdAndUpdate(user._id, user, {
             new: true
         });
-        console.log(position=="CM")
-        const player = new Player({position: position, name: playerName, rating: rating, raelLifeTeam: realLifeTeam, FBref_id:  FBref_id})
+     
+        const player = new Player({position: position, name: playerName, rating: rating, raelLifeTeam: realLifeTeam, FBref_id:  FBref_id, fpoints: fpoints})
         await player.save();
         if (position=="ST"){
             newUser.team.ST = player;
@@ -121,7 +175,7 @@ router.post('/draft', async (req, res) => {
         if (position=="GK"){
             newUser.team.GK = player;
         }
-        console.log(newUser.team.CM);
+       
         await newUser.save();
         return res.status(201).json(newUser)
     } catch{
@@ -159,6 +213,77 @@ router.get('/search/user', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+router.post('/stats', async (req, res) => {
+    try {
+        const { FBref_id } = req.body;
+        const url = `https://fbref.com/en/players/${FBref_id}/matchlogs/2022-2023/c9/Match-Logs`;
+        let goals = "";
+        let assists="";
+        let shots = "";
+        let touches = "";
+        let tackles = "";
+        let passComplete = "";
+        let saves = "";
+        let goalAgainst = "";
+
+        try {
+            const response = await axios.get(url);
+
+            if (response.status === 200) {
+                const html = response.data;
+                // Use Cheerio to load the HTML content
+                const $ = cheerio.load(html);
+                // Step 2: Extract the goals from the relevant HTML element
+                const goalsArray = $('td[data-stat="goals"]').map(function () {
+                    return $(this).text().trim();
+                }).get();
+                goals = goalsArray.join(' ');
+
+                
+                const assArray = $('td[data-stat="assists"]').map(function () {
+                    return $(this).text().trim();
+                }).get();
+                assists = assArray.join(' ');
+                const shotsArray = $('td[data-stat="shots"]').map(function () {
+                    return $(this).text().trim();
+                }).get();
+                shots = shotsArray.join(' ');
+                const touchesArray = $('td[data-stat="touches"]').map(function () {
+                    return $(this).text().trim();
+                }).get();
+                touches = touchesArray.join(' ');
+                const tacklesArray = $('td[data-stat="tackles"]').map(function () {
+                    return $(this).text().trim();
+                }).get();
+                tackles = tacklesArray.join(' ');
+                const passCompArray = $('td[data-stat="passes"]').map(function () {
+                    return $(this).text().trim();
+                }).get();
+                passComplete = passCompArray.join(' ');
+                const savesArray = $('td[data-stat="gk_saves"]').map(function () {
+                    return $(this).text().trim();
+                }).get();
+                saves = savesArray.join(' ');
+                const goalsAgainstArray = $('td[data-stat="gk_goals_against"]').map(function () {
+                    return $(this).text().trim();
+                }).get();
+                goalsAgainst = goalsAgainstArray.join(' ');
+
+                //console.log(goals);
+            } else {
+                console.error(`HTTP GET request failed with status code ${response.status}`);
+            }
+        } catch (error) {
+            console.error('Error fetching the web page:', error);
+        }
+
+        return res.status(201).json({goals,assists,shots,touches,tackles,passComplete,saves,goalsAgainst});
+    } catch (error) {
+        console.error(error);
+        return res.status(400).json({ message: "Error updating team" });
     }
 });
 
