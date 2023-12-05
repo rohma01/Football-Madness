@@ -828,8 +828,13 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         console.log("goalsAgainst: ",goalsAgainst);
        
         for (let i = 0; i<8; i++){
-            
-            fpoints += ((parseInt(goals[i])*10)+(parseInt(assists[i])*4)+(parseInt(shots[i]))+(parseInt(touches[i])*0.1))+" ";
+            console.log()
+            if (position == "GK"){
+                fpoints += (parseInt(saves[i]*6)+parseInt(goalsAgainst[i]*-1));
+            }   
+            else{
+                fpoints += ((parseInt(goals[i])*12)+(parseInt(assists[i])*6)+(parseInt(shots[i]*2))+(parseInt(touches[i])*0.1)+(parseInt(tackles[i])*2)+(parseInt(passComplete[i])*0.25))+" ";
+            }
         }
         console.log(fpoints)
     }
