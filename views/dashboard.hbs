@@ -4,8 +4,84 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - {{ user.username }}</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #e6f7ff; /* Light blue background */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      background-color: #3498db; /* Darker blue for the header */
+      padding: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #fff; /* White text for the header */
+      margin-top: 0;
+    }
+
+    button {
+      background-color: #2980b9; /* Darker blue for buttons */
+      color: #fff;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 0 10px;
+    }
+
+    button:hover {
+      background-color: #1c6ca6; /* Darker shade on hover */
+    }
+
+    p {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      margin: 0;
+    }
+
+    a {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    table {
+      margin-top: 2rem;
+      border-collapse: collapse;
+      width: 80%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+  </style>
 </head>
- <script src="/socket.io/socket.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
   <script>
     
   const socket = io();
@@ -13,22 +89,129 @@
     username: '{{ user.username }}',
     userId: '{{ user.userId }}' ,
   };
-  console.log(userData)
+  let user=null;
+
+        fetchUserData();
+
+  function fetchUserData() {
+    fetch(`/getUserByUsername?username=${userData.username}`)
+      .then(response => response.json())
+      .then(userCurr => {
+        console.log("User Information:", userCurr);
+        user = userCurr;
+        console.log(user);
+        populateTable();
+      })
+      .catch(error => console.error('Error fetching user data:', error));
+  }
+
+  function populateTable() {
+    // Select the table body
+    const tableBody = document.getElementById('playerTable').getElementsByTagName('tbody')[0];
+
+    // Iterate over the positions in the team
+    for (const position in user.team) {
+      if (user.team.hasOwnProperty(position)) {
+        const player = user.team[position];
+
+        // Create a new row
+        const row = tableBody.insertRow(-1);
+
+        // Insert player name in the first cell
+        const cell1 = row.insertCell(0);
+        cell1.innerHTML = player.name;
+
+        // Insert player points in the second cell
+        const cell2 = row.insertCell(1);
+        cell2.innerHTML = player.fpoints;
+      }
+    }
+  }
+
   // Emit the 'setUsername' event with the JSON string
   socket.emit('setUsername', userData);
-  
-  
+    
  </script>
 <body>
-  <h1>Welcome to the Dashboard, {{ user.username }}!</h1>
+  <header>
+    <h1>Welcome to the Dashboard, {{ user.username }}!</h1>
+  </header>
   <p><a href="/logout">Logout</a></p>
-  <button onclick="redirectToChatroom('{{ user.username }}')">Go to Chatroom</button>
+  <button id = "chatroom" onclick="redirectToChatroom('{{ user.username }}')">Go to Chatroom</button>
+  <button id = "leaderboard" onclick="redirectToLeaderboard('{{ user.username }}')">Leaderboard</button>
+  <button id = "matchup" onclick="redirectToMatchups('{{ user.username }}')">Matchups</button>
+
+  <table>
+    <tr>
+      <th>Player</th>
+      <th>Points</th>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
 
   <script>
     function redirectToChatroom(username) {
-      // Assuming you have a route that dynamically creates a room for the user
       window.location.href = `/drafting?username=${username}`;
+    }
+
+    function redirectToLeaderboard(username) {
+      // Replace with the actual leaderboard URL
+      window.location.href = `/leaderboard`;
+    }
+
+    function redirectToMatchups(username) {
+      // Replace with the actual matchups URL
+      window.location.href = `/matchups`;
     }
   </script>
 </body>
 </html>
+
+

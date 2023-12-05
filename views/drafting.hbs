@@ -68,9 +68,10 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(encodedString, 'text/html');
         const decodedString = doc.body.textContent;
-      //  const user = JSON.parse(localStorage.getItem('user'));
-        //console.log(user);
-
+        //console.log("devode: "+decodedString)
+        {{!-- let user = JSON.parse(localStorage.getItem('user'));
+        
+        console.log(user) --}}
         const username = getQueryParam("username");
         console.log("username; "+username);
         function getQueryParam(name) {
@@ -80,7 +81,7 @@
         let user=null;
 
         fetch(`/getUserByUsername?username=${username}`)
-  .then(response => response.json())
+  .then(response => response.json())  
   .then(userCurr => {
     // Handle the received user information
     console.log("User Information:", userCurr);
@@ -88,7 +89,8 @@
     // You can use the user information as needed
   })
   
-  console.log("user: "+user);
+
+
         // Now you can parse the decoded string as JSON
         const dataTemp = JSON.parse(decodedString);
 
@@ -134,6 +136,7 @@
       // Update your UI to reflect the user's departure
     });
  function render(draftData) {
+
       // Initialize draft data
       const boxA = document.getElementById('boxA');
       const playerDetails = document.getElementById('playerDetails');
@@ -187,7 +190,7 @@
       }
 
       // Function to select a player
-       function selectPlayer(player) {
+     async  function selectPlayer(player) {
         let doSelection = true;
         const { draftingTurn, teams} = draftData.draftteam;
           const { draftteam } = draftData
@@ -204,11 +207,13 @@
         if (doSelection){
           draftteam[draftingTurn].push(player)
           FBref_id = player.FBref_id;
+          console.log(FBref_id)
           position = player.position
           playerName = player.name
           rating = player.rating
           realLifeTeam = player.realLifeTeam
-        {{!-- const response2 = await fetch('/stats', {
+      
+      const response2 = await fetch('/stats', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -252,10 +257,10 @@
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({user, name, position, rating, realLifeTeam, FBref_id, fpoints}),
+        body: JSON.stringify({user, playerName, position, rating, realLifeTeam, FBref_id, fpoints}),
         
     });  
-    console.log(response) --}}
+    console.log(response)
 
 
           let oldDraftTurn = draftData.draftteam.draftingTurn;
@@ -318,6 +323,12 @@
           finalConsentButton.style.display = 'block';
         }
       }
+      async function callToDB(draftedPlayers){
+
+        
+    //console.log(response)
+
+      }
 
       // Event listener for final consent button
       finalConsentButton.addEventListener('click', () => {
@@ -327,11 +338,14 @@
       const { draftteam } = draftData;
               draftteam.finalconsence = true;
               finalConsentButton.style.display = 'none';
-              
               draftData.draftteam = draftteam;
-              socket.emit('chatMessage', {'username':draftingTurn,'data':JSON.stringify(draftData)} );
+              console.log("awiudob")
+              
+              console.log(draftteam[user._id])
+              addToDB(draftteam[user._id])
+              socket.emit('messageFinal', {'username':draftingTurn,'data':JSON.stringify(draftData)} );
 
-              window.location.href = '/dashboard';
+              //window.location.href = '/dashboard';
             
           //}
       });
@@ -350,7 +364,8 @@
     <div id="teamBoxes">
 
     </div>
-    <button id="finalConsentButton">Final Consent</button>
+  <button id="finalConsentButton">Final Consent</button>
+
   </div>
 
   <script>

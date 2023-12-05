@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const mongoose = require('mongoose');
+const userRoutes = require('./routes.js');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
@@ -12,6 +13,7 @@ const path = require('path');
 // AnotherFile.js
 const RoomManager = require('./roomManager');
 const User = require('./User.js')
+const Player= require('./Player.js')
 let users = []
 
 // MongoDB connection
@@ -20,6 +22,7 @@ mongoose.connect('mongodb+srv://rohma01:footballmadness@footballmadness.wkclor2.
   useUnifiedTopology: true,
 });
 
+app.use(userRoutes);
 // User Schema
 
 
@@ -89,10 +92,79 @@ io.on('connection', (socket) => {
 
   // Listen for chat messages
     socket.on('chatMessage', (message) => {    
-      console.log("QQQQQQQQQQQQQQQQQQQQQQQQQQQQ")
+      //og("QQQQQQQQQQQQQQQQQQQQQQQQQQQQ")
       //console.log(message)
-      console.log(message.data.User)
+      //console.log(message.data[0])
+      const actualMessage = JSON.parse(message.data);
+     // console.log(actualMessage.draftteam[message.username]);
       io.to(socket.roomId).emit('chatMessage', message);
+
+    });
+
+  
+  
+
+    socket.on('messageFinal', (message) => {    
+    //  console.log("MMMMMMMMMM")
+      //console.log(message)
+      //console.log(message.data[0])
+      let username = message.username;
+      let newUser = users[0]
+      for (let i=0; i<users.length; i++){
+        if (username == users[i]._id){
+          newUser = users[i]
+        }
+      }
+      const actualMessage = JSON.parse(message.data);
+    //  console.log(username);
+      for (let i =0; i<actualMessage.draftteam.teams.length; i++){
+        let userIdCurr = actualMessage.draftteam.teams[i];
+    //    console.log("---------------------")
+      //  console.log("--------------")
+     //   console.log(actualMessage.draftteam[userIdCurr]);
+        actualMessage.draftteam[userIdCurr].forEach(async playerr =>{
+
+          const player = new Player({position: playerr.position, name: playerr.name, rating: playerr.rating, realLifeTeam: playerr.realLifeTeam, FBref_id:  playerr.FBref_id, fpoints:3})
+         // await player.save();
+          if (player.position=="ST"){
+            newUser.team.ST = player;
+        }
+        if (player.position=="RW"){
+            newUser.team.RW = player;
+        }
+        if (player.position=="LW"){
+            newUser.team.LW = player;
+        }
+        if (player.position=="CAM"){
+            newUser.team.CAM = player;
+        }
+        if (player.position=="CM"){
+            newUser.team.CM = player;
+        }
+        if (player.position=="CDM"){
+            newUser.team.CDM = player;
+        }
+        if (player.position=="RB"){
+            newUser.team.RB = player;
+        }
+        if (player.position=="LB"){
+            newUser.team.LB = player;
+        }
+        if (player.position=="RCB"){
+            newUser.team.RCB = player;
+        }
+        if (player.position=="LCB"){
+            newUser.team.LCB = player;
+        }
+        if (player.position=="GK"){
+            newUser.team.GK = player;
+        }
+      // await newUser.save();
+        
+
+        });
+      }
+      //io.to(socket.roomId).emit('chatMessage', message);
 
     });
 
@@ -135,7 +207,7 @@ app.post('/login', async (req, res) => {
     // Find the user by username
     const user = await User.findOne({ username });
     users.push(user);
-   // console.log(users);
+    //console.log(users);
   
     // Check if the user exists and the password is correct
     if (user && await bcrypt.compare(password, user.password)) {
@@ -685,7 +757,7 @@ app.get('/getUserByUsername', (req, res) => {
 
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
-
+console.llog
   // Check if the username already exists
   const existingUser = await User.findOne({ username });
   if (existingUser) {
@@ -699,7 +771,6 @@ app.post('/register', async (req, res) => {
   const newUser = new User({
     username,
     password: hashedPassword,
-    userId: userId,
     
   });
 

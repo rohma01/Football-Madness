@@ -3,11 +3,14 @@ const cheerio = require('cheerio');
 const express = require('express');
 const User = require('./User');
 const Player = require('./Player');
+const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt')
 const router = express.Router();
 const MongoClient = require('mongodb').MongoClient;
 let users = []
-router.post('/register', async (req, res) => {
+console.log("reached router")
+router.use(bodyParser.json());
+router.post('/registerr', async (req, res) => {
     try { 
         console.log("Player Entered")
         const { username, password } = req.body;
@@ -37,7 +40,7 @@ router.post('/register', async (req, res) => {
                 if (!users.includes(existingUser.username)){
                     users.push(existingUser)
                 }
-                console.log(users)
+            //    console.log(users)
                 return res.status(201).json({redirect:'/homepage.html', user: existingUser});
                 // return res.status(201).json({ message: 'Welcome back existing user!' });
 
@@ -135,45 +138,55 @@ router.post('/draft', async (req, res) => {
     try{
         const {user, playerName, position, rating, realLifeTeam, FBref_id, fpoints }=req.body;
         
-   
+        console.log(req.body);
         let newUser = await User.findByIdAndUpdate(user._id, user, {
-            new: true
+            new: false
         });
-     
         const player = new Player({position: position, name: playerName, rating: rating, raelLifeTeam: realLifeTeam, FBref_id:  FBref_id, fpoints: fpoints})
         await player.save();
         if (position=="ST"){
             newUser.team.ST = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="RW"){
             newUser.team.RW = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="LW"){
             newUser.team.LW = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="CAM"){
             newUser.team.CAM = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="CM"){
             newUser.team.CM = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="CDM"){
             newUser.team.CDM = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="RB"){
             newUser.team.RB = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="LB"){
             newUser.team.LB = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="RCB"){
             newUser.team.RCB = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="LCB"){
             newUser.team.LCB = player;
+            console.log(user.username+" gets "+player.name);
         }
         if (position=="GK"){
             newUser.team.GK = player;
+            console.log(user.username+" gets "+player.name);
         }
        
         await newUser.save();
@@ -228,11 +241,14 @@ router.post('/stats', async (req, res) => {
         let passComplete = "";
         let saves = "";
         let goalAgainst = "";
+        
 
         try {
+           // console.log("here1")
             const response = await axios.get(url);
 
             if (response.status === 200) {
+                //console.log("here2")
                 const html = response.data;
                 // Use Cheerio to load the HTML content
                 const $ = cheerio.load(html);
