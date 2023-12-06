@@ -132,13 +132,13 @@ io.on('connection', (socket) => {
   });
 
   // Listen for chat messages
-    socket.on('chatMessage', (message) => {    
+    socket.on('draftMessage', (message) => {    
       //og("QQQQQQQQQQQQQQQQQQQQQQQQQQQQ")
       //console.log(message)
       //console.log(message.data[0])
       const actualMessage = JSON.parse(message.data);
      // console.log(actualMessage.draftteam[message.username]);
-      io.to(socket.roomId).emit('chatMessage', message);
+      io.to(socket.roomId).emit('draftMessage', message);
 
     });
 

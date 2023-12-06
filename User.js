@@ -20,6 +20,10 @@ const Player = require('./Player')
       ref: "User",
     },
     roomId: Number,
+    week: {
+      type: Number,
+      default: 0,
+    },
     team: {
       //ST: Player.schema,
       ST:{ type: Player.schema, default: new Player()},

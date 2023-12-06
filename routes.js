@@ -138,6 +138,28 @@ router.get('/draftGet', async (req, res) => {
     res.send("thing sent")
 });
 
+router.post('/weekIncrement', async (req, res) => {
+    try{
+    const user=req.body;
+
+    console.log(user);
+    console.log("week",user.week)
+    let newUser = await User.findByIdAndUpdate(user._id, user, {
+        new: false
+    });
+    newUser.week = newUser.week+1;
+    console.log(newUser.week)
+    
+    //console.log(newUser)
+    await newUser.save();
+        return res.status(201).json(newUser)
+    } 
+    catch{
+        return res.status(400).json({message: "Error updating team"})
+    }
+});
+
+
 router.post('/userGet', async (req, res) => {
     try{
     const user=req.body;

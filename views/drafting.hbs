@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Room - {{ data.roomId }}</title>
+  <title>Draft Room - {{ data.roomId }}</title>
   <script src="/socket.io/socket.io.js"></script>
   <style>
     body {
@@ -124,13 +124,13 @@
     });
 
     socket.on('roomReady', () => {
-      // Notify the user that the room is ready, and they can start chatting
-      alert('Room is ready! You can start chatting.');
+      // Notify the user that the room is ready, and they can start 
+      alert('Room is ready! You can start drafting.');
       console.log("room is read")
     });
 
-    socket.on('chatMessage', (data) => {
-      // Handle incoming chat messages
+    socket.on('draftMessage', (data) => {
+      // Handle incoming messages
       //console.log(`${data.username}: ${data.data}`);
       render(JSON.parse(data.data))
       // Update your UI to display the message
@@ -277,7 +277,7 @@
           
           renderPlayers();
           renderTeamBoxes();
-          socket.emit('chatMessage', {'username':draftingTurn,'data':JSON.stringify(draftData)} );
+          socket.emit('draftMessage', {'username':draftingTurn,'data':JSON.stringify(draftData)} );
           startConsent(oldDraftTurn);
         }
 
@@ -318,7 +318,7 @@
       const { draftteam } = draftData;
       console.log("other: "+draftteam[draftingTurn].length);
       console.log("curr: "+draftteam[oldDraftingTurn].length);
-      if ( draftteam[oldDraftingTurn].length >= 5 ) {
+      if ( draftteam[oldDraftingTurn].length >= 3 ) {
           console.log("done")
           finalConsentButton.style.display = 'block';
         }
@@ -375,7 +375,7 @@
     console.log(draftteam[user._id]); 
 
 
-    if (draftteam[user._id].length == 5 && calldbcounter == 0) {
+    if (draftteam[user._id].length == 3 && calldbcounter == 0) {
         calldbcounter++;
 
         let sendData = await callToDB(draftteam[user._id]); 
