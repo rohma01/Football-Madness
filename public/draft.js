@@ -839,13 +839,13 @@ async function draftPlayer(playerName,position,rating,realLifeTeam,FBref_id) {
         console.log(fpoints)
     }
 
-    const response = await fetch('/draft', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({user, playerName, position, rating, realLifeTeam, FBref_id, fpoints}),
-    });
+        const response = await fetch('/draft', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({user, playerName, position, rating, realLifeTeam, FBref_id, fpoints}),
+        });
 
     
 

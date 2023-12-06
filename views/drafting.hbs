@@ -63,6 +63,7 @@
     }
   </style>
   <script>
+    let roomID = 0;
     const socket = io();
        const encodedString ='{{data}}'
         const parser = new DOMParser();
@@ -79,26 +80,31 @@
             return urlParams.get(name);
         }
         let user=null;
+        let calldbcounter = 0;
 
-        fetch(`/getUserByUsername?username=${username}`)
-  .then(response => response.json())  
-  .then(userCurr => {
-    // Handle the received user information
-    console.log("User Information:", userCurr);
-    user=userCurr
-    // You can use the user information as needed
-  })
+      
   
 
 
         // Now you can parse the decoded string as JSON
-        const dataTemp = JSON.parse(decodedString);
+    const dataTemp = JSON.parse(decodedString);
 
     
     socket.emit('joinRoom', dataTemp.roomId );
     console.log(dataTemp)
-    var draftData = dataTemp.draftData;
-
+    roomID = dataTemp.roomId
+    let draftData = dataTemp.draftData;
+    
+    fetch(`/getUserByUsername?username=${username}`)
+  .then(response => response.json())  
+  .then(userCurr => {
+    // Handle the received user information
+    userCurr=userCurr.user
+    console.log("User Information:", userCurr);
+    user=userCurr
+    render(draftData)
+    // You can use the user information as needed
+  })
     function roundRobinSelection(array, currentIndex) {
 
       return function getNext() {
@@ -243,7 +249,7 @@
         for (let i = 0; i<8; i++){
             console.log()
             if (position == "GK"){
-                fpoints += (parseInt(saves[i]*6)+parseInt(goalsAgainst[i]*-1));
+                fpoints += (parseInt(saves[i]*6)+parseInt(goalsAgainst[i]*-1)+" ");
             }     
             else{
                 fpoints += ((parseInt(goals[i])*12)+(parseInt(assists[i])*6)+(parseInt(shots[i]*2))+(parseInt(touches[i])*0.1)+(parseInt(tackles[i])*2)+(parseInt(passComplete[i])*0.25))+" ";
@@ -251,16 +257,10 @@
         }
         console.log(fpoints)
     }
+    player.fpoints = fpoints;
+    console.log(player.fpoints)
 
-    const response = await fetch('/draft', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({user, playerName, position, rating, realLifeTeam, FBref_id, fpoints}),
-        
-    });  
-    console.log(response)
+    
 
 
           let oldDraftTurn = draftData.draftteam.draftingTurn;
@@ -324,6 +324,39 @@
         }
       }
       async function callToDB(draftedPlayers){
+        FBref_idList=[]
+        positionList=[]
+        playerNameList=[]
+        ratingList=[]
+        realLifeTeamList=[]
+        fpointsList=[]
+        for (let i = 0; i<draftedPlayers.length; i++){
+          player = draftedPlayers[i];
+          FBref_idList.push(player.FBref_id);
+          console.log(FBref_id)
+          positionList.push(player.position)
+          playerNameList.push(player.name)
+          ratingList.push(player.rating)
+          realLifeTeamList.push(player.realLifeTeam)
+          fpointsList.push(player.fpoints)
+        }
+        const response = await fetch('/draft', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({user, playerNameList, positionList, ratingList, realLifeTeamList, FBref_idList, fpointsList, roomID}),
+        
+    })
+
+    if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        return data; // Return the data from the asynchronous operation
+    } else {
+        return null;
+    }
+        S
 
         
     //console.log(response)
@@ -331,24 +364,32 @@
       }
 
       // Event listener for final consent button
-      finalConsentButton.addEventListener('click', () => {
+      finalConsentButton.addEventListener('click', async () => {
+    const { draftingTurn, teams } = draftData.draftteam;
+    const { draftteam } = draftData;
+    draftteam.finalconsence = true;
+    finalConsentButton.style.display = 'none';
+    draftData.draftteam = draftteam;
+    console.log(draftteam);
+    console.log(user)
+    console.log(draftteam[user._id]); 
 
-          
-              const { draftingTurn, teams} = draftData.draftteam;
-      const { draftteam } = draftData;
-              draftteam.finalconsence = true;
-              finalConsentButton.style.display = 'none';
-              draftData.draftteam = draftteam;
-              console.log("awiudob")
-              
-              console.log(draftteam[user._id])
-              addToDB(draftteam[user._id])
-              socket.emit('messageFinal', {'username':draftingTurn,'data':JSON.stringify(draftData)} );
 
-              //window.location.href = '/dashboard';
-            
-          //}
-      });
+    if (draftteam[user._id].length == 5 && calldbcounter == 0) {
+        calldbcounter++;
+
+        let sendData = await callToDB(draftteam[user._id]); 
+      // Use await to get the result of the asynchronous function
+    
+
+    console.log(sendData);
+    
+    socket.emit('messageFinal', { 'username': draftingTurn, 'data': JSON.stringify(draftData) });
+    
+    const dashboardURL = `/dashboard?sendData=${encodeURIComponent(JSON.stringify(sendData))}`;
+    window.location.href = dashboardURL;
+    }
+});
     }
 
   </script>

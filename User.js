@@ -19,7 +19,7 @@ const Player = require('./Player')
       type: mongoose.SchemaTypes.ObjectId,
       ref: "User",
     },
-    winPercent: Number,
+    roomId: Number,
     team: {
       //ST: Player.schema,
       ST:{ type: Player.schema, default: new Player()},

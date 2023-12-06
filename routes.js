@@ -133,68 +133,102 @@ router.post('/registerr', async (req, res) => {
 // });
 // router.get('/retrieveUserTurn', async (req, res) => {
 //     //
-// });
+// }); 
+router.get('/draftGet', async (req, res) => {
+    res.send("thing sent")
+});
+
+router.post('/userGet', async (req, res) => {
+    try{
+    const user=req.body;
+
+   // console.log(user._id)
+    let newUser = await User.findByIdAndUpdate(user._id, user, {
+        new: false
+    });
+    
+    //console.log(newUser)
+    await newUser.save();
+        return res.status(201).json(newUser)
+    } 
+    catch{
+        return res.status(400).json({message: "Error updating team"})
+    }
+});
 router.post('/draft', async (req, res) => {
     try{
-        const {user, playerName, position, rating, realLifeTeam, FBref_id, fpoints }=req.body;
+        const {user, playerNameList, positionList, ratingList, realLifeTeamList, FBref_idList, fpointsList, roomID }=req.body;
         
-        console.log(req.body);
+        
         let newUser = await User.findByIdAndUpdate(user._id, user, {
             new: false
         });
+        newUser.roomId = roomID
+        //console.log(newUser)
+        for (let i=  0; i<playerNameList.length; i++){
+            
+            playerName = playerNameList[i];
+            position= positionList[i];
+            rating = ratingList[i];
+            realLifeTeam = realLifeTeamList[i];
+            FBref_id = FBref_idList[i];
+            fpoints= fpointsList[i];
         const player = new Player({position: position, name: playerName, rating: rating, raelLifeTeam: realLifeTeam, FBref_id:  FBref_id, fpoints: fpoints})
         await player.save();
         if (position=="ST"){
             newUser.team.ST = player;
-            console.log(user.username+" gets "+player.name);
+           // console.log(user.username+" gets "+player.name);
         }
         if (position=="RW"){
             newUser.team.RW = player;
-            console.log(user.username+" gets "+player.name);
+           // console.log(user.username+" gets "+player.name);
         }
         if (position=="LW"){
             newUser.team.LW = player;
-            console.log(user.username+" gets "+player.name);
+            //console.log(user.username+" gets "+player.name);
         }
         if (position=="CAM"){
             newUser.team.CAM = player;
-            console.log(user.username+" gets "+player.name);
+            //console.log(user.username+" gets "+player.name);
         }
         if (position=="CM"){
             newUser.team.CM = player;
-            console.log(user.username+" gets "+player.name);
+           // console.log(user.username+" gets "+player.name);
         }
         if (position=="CDM"){
             newUser.team.CDM = player;
-            console.log(user.username+" gets "+player.name);
+          //  console.log(user.username+" gets "+player.name);
         }
         if (position=="RB"){
             newUser.team.RB = player;
-            console.log(user.username+" gets "+player.name);
+          //  console.log(user.username+" gets "+player.name);
         }
         if (position=="LB"){
             newUser.team.LB = player;
-            console.log(user.username+" gets "+player.name);
+          //  console.log(user.username+" gets "+player.name);
         }
         if (position=="RCB"){
             newUser.team.RCB = player;
-            console.log(user.username+" gets "+player.name);
+           // console.log(user.username+" gets "+player.name);
         }
         if (position=="LCB"){
             newUser.team.LCB = player;
-            console.log(user.username+" gets "+player.name);
+          //  console.log(user.username+" gets "+player.name);
         }
         if (position=="GK"){
             newUser.team.GK = player;
-            console.log(user.username+" gets "+player.name);
+          //  console.log(user.username+" gets "+player.name);
         }
-       
+    }
+
+    //console.log(newUser.team);
         await newUser.save();
         return res.status(201).json(newUser)
     } catch{
         return res.status(400).json({message: "Error updating team"})
     }
 })
+
 
 router.get('/search/player', async (req, res) => {
     try {

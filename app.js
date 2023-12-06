@@ -35,16 +35,57 @@ app.use(session({
 }));
 
 app.use((req, res, next) => {
+    const cookie = req.cookies
     req.io = io;
     return next();
   });
 
+//   app.post('/storeDataOnServer', (req, res) => {
+//     const userID = req.query.userID;
+//     const sendData = JSON.parse(req.query.sendData);
+
+//     // Store sendData in the session
+//     req.session.sendData = sendData;
+
+//     // Alternatively, you can store in userData if needed
+//     // userData[userID] = sendData;
+
+//     res.sendStatus(200);
+// });
+
+// app.get('/dashboard', (req, res) => {
+//   const sendData = req.session.sendData; // Access stored sendData in the session
+//   res.render('dashboard', { sendData });
+// });
   // Define the path to your public folder
 const publicPath = path.join(__dirname, '/images/');
 
 // Set up the static middleware to serve files from the public folder
 app.use(express.static(publicPath));
 
+// app.use(async (req, res, next) => {
+//   try {
+//     // Assuming you have some way to identify the user, like a session or token
+//     const username = req.session.username; // replace with your authentication mechanism
+
+//     // Fetch user from the database using the /getUserByUsername route or your actual route
+//     const response = await fetch(`/getUserByUsername?username=${username}`);
+    
+//     if (response.ok) {
+//       const user = await response.json();
+//       // Attach the user object to the request for further use in route handlers
+//       req.user = user;
+//     } else {
+//       // Handle the case where fetching user fails
+//       console.error('Error fetching user:', response.statusText);
+//     }
+
+//     next(); // Move to the next middleware or route handler
+//   } catch (error) {
+//     console.error('Error fetching user:', error);
+//     next(error); // Pass the error to the error handler
+//   }
+// });
 // Serve socket.io script
 app.get('/socket.io', (req, res) => {
   res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
@@ -55,7 +96,7 @@ app.get('/socket.io/socket.io.js', (req, res) => {
 });
 
 const activeRooms = {};
-const MAX_USER_PER_ROOM = 2;
+const MAX_USER_PER_ROOM = 4;
 const roomManager = new RoomManager(MAX_USER_PER_ROOM);
 const userRoomMap ={}
 const userDetailsMap={}
@@ -73,7 +114,7 @@ io.on('connection', (socket) => {
     console.log("roomId" + roomId);
     socket.join(roomId);
     socket.roomId = roomId;
-
+    
     if (!activeRooms[roomId]) {
       activeRooms[roomId] = [];
     }
@@ -101,7 +142,7 @@ io.on('connection', (socket) => {
 
     });
 
-  
+
   
 
     socket.on('messageFinal', (message) => {    
@@ -124,42 +165,6 @@ io.on('connection', (socket) => {
      //   console.log(actualMessage.draftteam[userIdCurr]);
         actualMessage.draftteam[userIdCurr].forEach(async playerr =>{
 
-          const player = new Player({position: playerr.position, name: playerr.name, rating: playerr.rating, realLifeTeam: playerr.realLifeTeam, FBref_id:  playerr.FBref_id, fpoints:3})
-         // await player.save();
-          if (player.position=="ST"){
-            newUser.team.ST = player;
-        }
-        if (player.position=="RW"){
-            newUser.team.RW = player;
-        }
-        if (player.position=="LW"){
-            newUser.team.LW = player;
-        }
-        if (player.position=="CAM"){
-            newUser.team.CAM = player;
-        }
-        if (player.position=="CM"){
-            newUser.team.CM = player;
-        }
-        if (player.position=="CDM"){
-            newUser.team.CDM = player;
-        }
-        if (player.position=="RB"){
-            newUser.team.RB = player;
-        }
-        if (player.position=="LB"){
-            newUser.team.LB = player;
-        }
-        if (player.position=="RCB"){
-            newUser.team.RCB = player;
-        }
-        if (player.position=="LCB"){
-            newUser.team.LCB = player;
-        }
-        if (player.position=="GK"){
-            newUser.team.GK = player;
-        }
-      // await newUser.save();
         
 
         });
@@ -206,8 +211,9 @@ app.post('/login', async (req, res) => {
   
     // Find the user by username
     const user = await User.findOne({ username });
+    console.log("aiowdbaoiwdbaiodwnaiodnaooooooooooooooooooooooooooooooooo")
     users.push(user);
-    //console.log(users);
+    console.log(users);
   
     // Check if the user exists and the password is correct
     if (user && await bcrypt.compare(password, user.password)) {
@@ -216,7 +222,7 @@ app.post('/login', async (req, res) => {
       req.session.userName = user.username;
       roomManager.addUser(req.session.userId)
       // Emit the 'setUsername' event to the specific socket ID
-  
+      
       return res.redirect('/dashboard');
     }
   
@@ -742,14 +748,16 @@ app.get('/drafting', (req, res) => {
   }
   
 });
-
+app.get('/matchup', (req, res) => {
+  res.render('/matchup')
+});
 app.get('/getUserByUsername', (req, res) => {
   const { username } = req.query;
 
   const user = users.find(u => u.username === username);
 
   if (user) {
-    res.json(user);
+    res.json({user, users});
   } else {
     res.status(404).json({ error: 'User not found' });
   }

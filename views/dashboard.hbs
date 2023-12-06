@@ -83,54 +83,313 @@
 </head>
 <script src="/socket.io/socket.io.js"></script>
   <script>
+    let userList=[]
     
   const socket = io();
    const userData = {
     username: '{{ user.username }}',
     userId: '{{ user.userId }}' ,
   };
-  let user=null;
+  let user = null;
+   fetch(`/getUserByUsername?username=${userData.username}`)
+  .then(response => response.json())  
+  .then(userCurr => {
+    // Handle the received user information
+    userList=userCurr.users;
+    console.log("User Information:", userCurr);
+    user=userCurr.user
+    
+    console.log(fetchUserData())
+    fetchOtherUserData()
+    
+    // You can use the user information as needed
+  })
+  
 
-        fetchUserData();
+  async function fetchUserData(){
+    
+      const response = await fetch('/userGet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+        
+    })
 
-  function fetchUserData() {
-    fetch(`/getUserByUsername?username=${userData.username}`)
-      .then(response => response.json())
-      .then(userCurr => {
-        console.log("User Information:", userCurr);
-        user = userCurr;
-        console.log(user);
-        populateTable();
-      })
-      .catch(error => console.error('Error fetching user data:', error));
+    if (response.ok) {
+        const data = await response.json();
+      
+        renderPlayerTable(data.team,0,data.username);
+        return data; // Return the data from the asynchronous operation
+    }
+    
   }
 
-  function populateTable() {
-    // Select the table body
-    const tableBody = document.getElementById('playerTable').getElementsByTagName('tbody')[0];
+  async function fetchOtherUserData(){
+    console.log(userList)
+    let counter = 0;
+    for (let i = 0; i<userList.length; i++){
+      let userCurr = userList[i]
+      console.log("current user in loop", userCurr)
+      console.log("user", user)
+      if (userCurr.username != user.username){
+        counter++;
+        console.log("current user diff from user", userCurr)
+        const response = await fetch('/userGet', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userCurr),
+      })
 
-    // Iterate over the positions in the team
-    for (const position in user.team) {
-      if (user.team.hasOwnProperty(position)) {
-        const player = user.team[position];
-
-        // Create a new row
-        const row = tableBody.insertRow(-1);
-
-        // Insert player name in the first cell
-        const cell1 = row.insertCell(0);
-        cell1.innerHTML = player.name;
-
-        // Insert player points in the second cell
-        const cell2 = row.insertCell(1);
-        cell2.innerHTML = player.fpoints;
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        
+        renderPlayerTable(data.team,counter,data.username);
+        
+        // Return the data from the asynchronous operation
+      }
       }
     }
+
   }
 
+
+  console.log(userData);
   // Emit the 'setUsername' event with the JSON string
   socket.emit('setUsername', userData);
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sendDataParam = urlParams.get('sendData');
+
+    if (sendDataParam) {
+        const sendData = JSON.parse(decodeURIComponent(sendDataParam));
+
+        // Now you can use sendData in your dashboard
+        console.log('Received sendData in the dashboard:', sendData);
+        renderPlayerTable(sendData.team);
+        
+
+        console.log(sendData.players);
+    }
+});
+
+
+function renderPlayerTable(player, isUser, name) {
+  console.log(isUser, player)
+  let playerTableBody;
+  let caption;
+  if (isUser==0){
+    playerTableBody = document.getElementById('playerTableBody');
+    caption = document.getElementById('caption');
+    caption.textContent = name;
+    console.log(playerTableBody)
     
+    
+  }
+  else if (isUser == 1){
+    playerTableBody = document.getElementById('playerTableBody2');
+    caption = document.getElementById('caption2');
+    caption.textContent = name;
+    console.log(playerTableBody)
+    console.log(player)
+    
+  }
+  else if (isUser == 2){
+    playerTableBody = document.getElementById('playerTableBody3');
+    caption = document.getElementById('caption3');
+    caption.textContent = name;
+    console.log(playerTableBody)
+    console.log(player)
+    
+  }
+  else if (isUser == 3){
+    playerTableBody = document.getElementById('playerTableBody4');
+    caption = document.getElementById('caption4');
+    caption.textContent = name;
+    console.log(playerTableBody)
+    console.log(player)
+    
+  }
+  playerTableBody.innerHTML = '';
+    let row = document.createElement('tr');
+
+    let playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.ST.name;
+
+    let fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.ST.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+
+    
+
+
+    row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.RW.name;
+
+    fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.RW.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+     row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.LW.name;
+
+     fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.LW.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+   row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.CAM.name;
+
+     fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.CAM.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+     row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.CM.name;
+
+     fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.CM.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+     row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.CDM.name;
+
+     fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.CDM.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+     row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.RB.name;
+
+     fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.RB.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+     row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.LB.name;
+
+     fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.LB.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+     row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.RCB.name;
+
+   fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.RCB.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+     row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.LCB.name;
+
+     fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.LCB.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+    
+    
+
+
+     row = document.createElement('tr');
+
+     playerNameCell = document.createElement('td');
+    playerNameCell.textContent = player.GK.name;
+
+     fpointsCell = document.createElement('td');
+    fpointsCell.textContent = player.GK.fpoints;
+
+    row.appendChild(playerNameCell);
+    row.appendChild(fpointsCell);
+
+    playerTableBody.appendChild(row);
+
+    
+}
  </script>
 <body>
   <header>
@@ -141,61 +400,58 @@
   <button id = "leaderboard" onclick="redirectToLeaderboard('{{ user.username }}')">Leaderboard</button>
   <button id = "matchup" onclick="redirectToMatchups('{{ user.username }}')">Matchups</button>
 
-  <table>
+ <table id="playerTable">
+  <caption id = "caption"> User</caption>
+  <thead>
     <tr>
-      <th>Player</th>
-      <th>Points</th>
+      <th>Player Name</th>
+      <th>Fantasy Points</th>
     </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>
-  </table>
+  </thead>
+  <tbody id="playerTableBody"></tbody>
+</table>
 
+<div id="buttons-container">
+    <button id="simulate-button" onclick="simulate()">Simulate</button>
+    <button id="next-week-button" onclick="nextWeek()">Next Week</button>
+  </div>
+  <div id="view-other-matchups-header">
+  <h2>View Other Matchups</h2>
+</div>
+
+<table id="playerTable2">
+  <caption id = "caption2"> Opp1</caption>
+  <thead>
+    <tr>
+      <th>Player Name</th>
+      <th>Fantasy Points</th>
+    </tr>
+  </thead>
+  <tbody id="playerTableBody2"></tbody>
+</table>
+
+ <table id="playerTable3">
+  <caption id = "caption3">Opp2</caption>
+  <thead>
+    <tr>
+      <th>Player Name</th>
+      <th>Fantasy Points</th>
+    </tr>
+  </thead>
+  <tbody id="playerTableBody3"></tbody>
+</table>
+
+  <table id="playerTable4">
+    <caption id = "caption4">Opp3</caption>
+  <thead>
+    <tr>
+      <th>Player Name</th>
+      <th>Fantasy Points</th>
+    </tr>
+  </thead>
+  <tbody id="playerTableBody4"></tbody>
+</table>
+</div>
   <script>
     function redirectToChatroom(username) {
       window.location.href = `/drafting?username=${username}`;
@@ -208,7 +464,7 @@
 
     function redirectToMatchups(username) {
       // Replace with the actual matchups URL
-      window.location.href = `/matchups`;
+      window.location.href = `/matchup`;
     }
   </script>
 </body>
